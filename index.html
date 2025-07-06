@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Para Dias Difíceis</title>
+  <style>
+    body {
+      background-color: #1e1e2f;
+      color: #f0e6f6;
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.4em;
+      margin-bottom: 20px;
+    }
+    #frase {
+      font-size: 1.5em;
+      margin: 30px 0;
+      max-width: 600px;
+    }
+    button {
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>Para Dias Difíceis</h1>
+  <div id="frase">Clique abaixo para uma frase que te abrace.</div>
+  <button onclick="novaFrase()">Nova frase</button>
+
+  <script>
+    const frases = [
+      "Você é digno de descanso, mesmo quando o mundo não para.",
+      "Sentir não é fraqueza: é um traço de humanidade que resiste.",
+      "Nem todo dia precisa ser produtivo para ser valioso.",
+      "Você não é só o que consegue entregar. Você é.",
+      "Acolher sua dor é o primeiro passo para não caminhar sozinho com ela.",
+      "Existe potência até na pausa. Existe presença até no silêncio.",
+      "Se hoje doer, que amanhã seja menos. E isso já é esperança.",
+      "Você não precisa dar conta de tudo. Isso é mito neoliberal.",
+      "O mundo tenta te endurecer, mas sentir ainda é um ato político.",
+      "Algumas dores não se explicam, mas podem ser ouvidas. Eu te ouço.",
+      "Você não é inferior por estar cansado. Cansaço também é corpo falando.",
+      "O cuidado é revolucionário — comece com o seu.",
+      "A vida real exige mais ternura do que performance.",
+      "Você não está sozinho. Ainda que pareça, ainda que tudo cale.",
+      "Respeite seus limites como respeitaria o de alguém que você ama.",
+      "Nem toda ferida precisa ser escondida. Algumas precisam de ar.",
+      "Seu valor não está em quanto você produz, mas em quem você é.",
+      "A dor é real, mas o afeto também é. E ele cura.",
+      "Ser vulnerável não é cair — é confiar.",
+      "Sua existência é legítima, mesmo nos dias em que você se esconde.",
+      "Amor não é exigência, é presença.",
+      "Ser forte às vezes é aceitar não estar bem.",
+      "Você merece cuidado mesmo quando não consegue pedi-lo.",
+      "Há beleza no recomeço, mesmo que ele venha com medo.",
+      "Nem sempre a luz vem de fora. Às vezes ela está em resistir.",
+      "Você é mais do que os rótulos que te colocaram.",
+      "A tristeza também faz parte da travessia.",
+      "Tudo bem se o mundo estiver pesado. Você não precisa carregá-lo sozinho.",
+      "Você é importante. Hoje também.",
+      "Ninguém floresce o tempo todo. Descansar também é crescer.",
+      "Não se cobre coragem o tempo todo. Apenas esteja.",
+      "Chorar não te faz fraco. Te faz humano.",
+      "Mesmo calado, seu sentir fala alto.",
+      "Você pode pedir colo, mesmo adulto.",
+      "A existência não precisa ser heroica pra ser válida.",
+      "Você tem o direito de parar. O mundo pode esperar.",
+      "Quem te ama de verdade não cobra força, oferece presença.",
+      "Viver é atravessar. E atravessar também cansa.",
+      "A leveza não vem da fuga, mas do encontro.",
+      "Suas dores merecem escuta, não julgamento.",
+      "Nenhuma emoção sua é errada. Todas contam uma história.",
+      "Respirar já é ato de resistência.",
+      "O tempo não cura tudo, mas permite que você se reconstrua.",
+      "Você não está atrasado. Está no seu tempo.",
+      "O afeto é uma forma de revolução silenciosa.",
+      "Mesmo que ninguém veja, seus esforços contam.",
+      "Cuidar de si não é egoísmo. É sobrevivência.",
+      "Sua dor não precisa de justificativa para ser válida.",
+      "Você é merecedor de descanso e gentileza.",
+      "Não é fraqueza precisar de ajuda. É sabedoria.",
+      "O amor também mora na escuta atenta.",
+      "Você é digno de amor mesmo nos dias em que não se sente assim.",
+      "Cada passo que você dá em direção ao cuidado importa.",
+      "Às vezes, sobreviver é o bastante.",
+      "Sua existência já é um manifesto.",
+      "Você não precisa estar inteiro para ser amado.",
+      "Abrace o que sente. Isso também é cura.",
+      "As pausas também fazem parte da melodia.",
+      "Você tem valor mesmo nos dias silenciosos.",
+      "Sua história importa, mesmo que ela doa agora.",
+      "Não existe forma certa de sentir. Existe verdade no que vem.",
+      "Tudo bem não saber o próximo passo. O importante é continuar.",
+      "Mesmo as sombras fazem parte do caminho.",
+      "Você pode se refazer quantas vezes quiser.",
+      "Seu sentir não precisa de autorização.",
+      "Você não é seu trauma. Você é quem sobreviveu a ele.",
+      "O autocuidado é político. Cuide-se com amor.",
+      "Se for preciso, recomece. Com delicadeza.",
+      "Seu corpo merece descanso. Sua alma também.",
+      "Sentir é a forma mais pura de existir.",
+      "Você não precisa entender tudo agora. Só precisa estar aqui.",
+      "A vida não é corrida. É travessia.",
+      "Você é bem-vindo, mesmo nos dias nublados.",
+      "Nenhum passo seu foi em vão.",
+      "Tudo bem se hoje você só conseguir existir. Isso já é muito.",
+      "Mesmo que o mundo diga o contrário, você importa.",
+      "A ternura também é força.",
+      "Você merece ser tratado com a mesma compaixão que oferece aos outros.",
+      "O silêncio também comunica. E ele diz que você precisa de paz.",
+      "Mesmo quebrado, ainda há beleza em você."
+    ];
+
+    function novaFrase() {
+      const i = Math.floor(Math.random() * frases.length);
+      document.getElementById("frase").innerText = frases[i];
+    }
+  </script>
+</body>
+</html>
