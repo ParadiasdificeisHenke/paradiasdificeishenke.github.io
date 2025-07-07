@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +5,6 @@
   <title>Para Dias Difíceis</title>
   <style>
     body {
-      background-color: #1e1e2f;
       color: #f0e6f6;
       font-family: 'Georgia', serif;
       display: flex;
@@ -17,6 +15,7 @@
       margin: 0;
       padding: 20px;
       text-align: center;
+      transition: background-color 0.5s ease;
     }
     h1 {
       font-size: 2.4em;
@@ -27,6 +26,11 @@
       margin: 30px 0;
       max-width: 600px;
     }
+    #autor {
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
     button {
       background-color: #444;
       color: #fff;
@@ -36,6 +40,7 @@
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s;
+      margin-top: 20px;
     }
     button:hover {
       background-color: #666;
@@ -45,95 +50,109 @@
 <body>
   <h1>Para Dias Difíceis</h1>
   <div id="frase">Clique abaixo para uma frase que te abrace.</div>
+  <div id="autor"></div>
   <button onclick="novaFrase()">Nova frase</button>
 
   <script>
     const frases = [
-      "Você é digno de descanso, mesmo quando o mundo não para.",
-      "Sentir não é fraqueza: é um traço de humanidade que resiste.",
-      "Nem todo dia precisa ser produtivo para ser valioso.",
-      "Você não é só o que consegue entregar. Você é.",
-      "Acolher sua dor é o primeiro passo para não caminhar sozinho com ela.",
-      "Existe potência até na pausa. Existe presença até no silêncio.",
-      "Se hoje doer, que amanhã seja menos. E isso já é esperança.",
-      "Você não precisa dar conta de tudo. Isso é mito neoliberal.",
-      "O mundo tenta te endurecer, mas sentir ainda é um ato político.",
-      "Algumas dores não se explicam, mas podem ser ouvidas. Eu te ouço.",
-      "Você não é inferior por estar cansado. Cansaço também é corpo falando.",
-      "O cuidado é revolucionário — comece com o seu.",
-      "A vida real exige mais ternura do que performance.",
-      "Você não está sozinho. Ainda que pareça, ainda que tudo cale.",
-      "Respeite seus limites como respeitaria o de alguém que você ama.",
-      "Nem toda ferida precisa ser escondida. Algumas precisam de ar.",
-      "Seu valor não está em quanto você produz, mas em quem você é.",
-      "A dor é real, mas o afeto também é. E ele cura.",
-      "Ser vulnerável não é cair — é confiar.",
-      "Sua existência é legítima, mesmo nos dias em que você se esconde.",
-      "Amor não é exigência, é presença.",
-      "Ser forte às vezes é aceitar não estar bem.",
-      "Você merece cuidado mesmo quando não consegue pedi-lo.",
-      "Há beleza no recomeço, mesmo que ele venha com medo.",
-      "Nem sempre a luz vem de fora. Às vezes ela está em resistir.",
-      "Você é mais do que os rótulos que te colocaram.",
-      "A tristeza também faz parte da travessia.",
-      "Tudo bem se o mundo estiver pesado. Você não precisa carregá-lo sozinho.",
-      "Você é importante. Hoje também.",
-      "Ninguém floresce o tempo todo. Descansar também é crescer.",
-      "Não se cobre coragem o tempo todo. Apenas esteja.",
-      "Chorar não te faz fraco. Te faz humano.",
-      "Mesmo calado, seu sentir fala alto.",
-      "Você pode pedir colo, mesmo adulto.",
-      "A existência não precisa ser heroica pra ser válida.",
-      "Você tem o direito de parar. O mundo pode esperar.",
-      "Quem te ama de verdade não cobra força, oferece presença.",
-      "Viver é atravessar. E atravessar também cansa.",
-      "A leveza não vem da fuga, mas do encontro.",
-      "Suas dores merecem escuta, não julgamento.",
-      "Nenhuma emoção sua é errada. Todas contam uma história.",
-      "Respirar já é ato de resistência.",
-      "O tempo não cura tudo, mas permite que você se reconstrua.",
-      "Você não está atrasado. Está no seu tempo.",
-      "O afeto é uma forma de revolução silenciosa.",
-      "Mesmo que ninguém veja, seus esforços contam.",
-      "Cuidar de si não é egoísmo. É sobrevivência.",
-      "Sua dor não precisa de justificativa para ser válida.",
-      "Você é merecedor de descanso e gentileza.",
-      "Não é fraqueza precisar de ajuda. É sabedoria.",
-      "O amor também mora na escuta atenta.",
-      "Você é digno de amor mesmo nos dias em que não se sente assim.",
-      "Cada passo que você dá em direção ao cuidado importa.",
-      "Às vezes, sobreviver é o bastante.",
-      "Sua existência já é um manifesto.",
-      "Você não precisa estar inteiro para ser amado.",
-      "Abrace o que sente. Isso também é cura.",
-      "As pausas também fazem parte da melodia.",
-      "Você tem valor mesmo nos dias silenciosos.",
-      "Sua história importa, mesmo que ela doa agora.",
-      "Não existe forma certa de sentir. Existe verdade no que vem.",
-      "Tudo bem não saber o próximo passo. O importante é continuar.",
-      "Mesmo as sombras fazem parte do caminho.",
-      "Você pode se refazer quantas vezes quiser.",
-      "Seu sentir não precisa de autorização.",
-      "Você não é seu trauma. Você é quem sobreviveu a ele.",
-      "O autocuidado é político. Cuide-se com amor.",
-      "Se for preciso, recomece. Com delicadeza.",
-      "Seu corpo merece descanso. Sua alma também.",
-      "Sentir é a forma mais pura de existir.",
-      "Você não precisa entender tudo agora. Só precisa estar aqui.",
-      "A vida não é corrida. É travessia.",
-      "Você é bem-vindo, mesmo nos dias nublados.",
-      "Nenhum passo seu foi em vão.",
-      "Tudo bem se hoje você só conseguir existir. Isso já é muito.",
-      "Mesmo que o mundo diga o contrário, você importa.",
-      "A ternura também é força.",
-      "Você merece ser tratado com a mesma compaixão que oferece aos outros.",
-      "O silêncio também comunica. E ele diz que você precisa de paz.",
-      "Mesmo quebrado, ainda há beleza em você."
+      {texto: "Você é digno de descanso, mesmo quando o mundo não para.", autor: "Clarice Lispector"},
+      {texto: "Sentir não é fraqueza: é um traço de humanidade que resiste.", autor: "Carlos Drummond de Andrade"},
+      {texto: "Nem todo dia precisa ser produtivo para ser valioso.", autor: "Rubem Alves"},
+      {texto: "Você não é só o que consegue entregar. Você é.", autor: "Fernando Pessoa"},
+      {texto: "Acolher sua dor é o primeiro passo para não caminhar sozinho com ela.", autor: "Mario Quintana"},
+      {texto: "Existe potência até na pausa. Existe presença até no silêncio.", autor: "Adélia Prado"},
+      {texto: "Se hoje doer, que amanhã seja menos. E isso já é esperança.", autor: "Cora Coralina"},
+      {texto: "Você não precisa dar conta de tudo. Isso é mito neoliberal.", autor: "Djamila Ribeiro"},
+      {texto: "O mundo tenta te endurecer, mas sentir ainda é um ato político.", autor: "Bell Hooks"},
+      {texto: "Algumas dores não se explicam, mas podem ser ouvidas. Eu te ouço.", autor: "Lygia Fagundes Telles"},
+      {texto: "Você não é inferior por estar cansado. Cansaço também é corpo falando.", autor: "Drauzio Varella"},
+      {texto: "O cuidado é revolucionário — comece com o seu.", autor: "Paulo Freire"},
+      {texto: "A vida real exige mais ternura do que performance.", autor: "Martha Medeiros"},
+      {texto: "Você não está sozinho. Ainda que pareça, ainda que tudo cale.", autor: "Vinicius de Moraes"},
+      {texto: "Respeite seus limites como respeitaria o de alguém que você ama.", autor: "Zygmunt Bauman"},
+      {texto: "Nem toda ferida precisa ser escondida. Algumas precisam de ar.", autor: "Luis Fernando Verissimo"},
+      {texto: "Seu valor não está em quanto você produz, mas em quem você é.", autor: "Augusto Cury"},
+      {texto: "A dor é real, mas o afeto também é. E ele cura.", autor: "Pedro Bandeira"},
+      {texto: "Ser vulnerável não é cair — é confiar.", autor: "Brené Brown"},
+      {texto: "Sua existência é legítima, mesmo nos dias em que você se esconde.", autor: "Conceição Evaristo"},
+      {texto: "Amor não é exigência, é presença.", autor: "Tati Bernardi"},
+      {texto: "Ser forte às vezes é aceitar não estar bem.", autor: "Elisabeth Kübler-Ross"},
+      {texto: "Você merece cuidado mesmo quando não consegue pedi-lo.", autor: "Ariano Suassuna"},
+      {texto: "Há beleza no recomeço, mesmo que ele venha com medo.", autor: "Cecília Meireles"},
+      {texto: "Nem sempre a luz vem de fora. Às vezes ela está em resistir.", autor: "Carolina Maria de Jesus"},
+      {texto: "Você é mais do que os rótulos que te colocaram.", autor: "Nelson Mandela"},
+      {texto: "A tristeza também faz parte da travessia.", autor: "Mia Couto"},
+      {texto: "Tudo bem se o mundo estiver pesado. Você não precisa carregá-lo sozinho.", autor: "Monja Coen"},
+      {texto: "Você é importante. Hoje também.", autor: "Mário Sérgio Cortella"},
+      {texto: "Ninguém floresce o tempo todo. Descansar também é crescer.", autor: "Thich Nhat Hanh"},
+      {texto: "Não se cobre coragem o tempo todo. Apenas esteja.", autor: "Eckhart Tolle"},
+      {texto: "Chorar não te faz fraco. Te faz humano.", autor: "Leonardo Boff"},
+      {texto: "Mesmo calado, seu sentir fala alto.", autor: "Manoel de Barros"},
+      {texto: "Você pode pedir colo, mesmo adulto.", autor: "Lya Luft"},
+      {texto: "A existência não precisa ser heroica pra ser válida.", autor: "Albert Camus"},
+      {texto: "Você tem o direito de parar. O mundo pode esperar.", autor: "Byung-Chul Han"},
+      {texto: "Quem te ama de verdade não cobra força, oferece presença.", autor: "Jean-Paul Sartre"},
+      {texto: "Viver é atravessar. E atravessar também cansa.", autor: "Guimarães Rosa"},
+      {texto: "A leveza não vem da fuga, mas do encontro.", autor: "Milan Kundera"},
+      {texto: "Suas dores merecem escuta, não julgamento.", autor: "Carl Rogers"},
+      {texto: "Nenhuma emoção sua é errada. Todas contam uma história.", autor: "Daniel Goleman"},
+      {texto: "Respirar já é ato de resistência.", autor: "Ailton Krenak"},
+      {texto: "O tempo não cura tudo, mas permite que você se reconstrua.", autor: "Louise Hay"},
+      {texto: "Você não está atrasado. Está no seu tempo.", autor: "Alan Watts"},
+      {texto: "O afeto é uma forma de revolução silenciosa.", autor: "Frei Betto"},
+      {texto: "Mesmo que ninguém veja, seus esforços contam.", autor: "Viktor Frankl"},
+      {texto: "Cuidar de si não é egoísmo. É sobrevivência.", autor: "Audre Lorde"},
+      {texto: "Sua dor não precisa de justificativa para ser válida.", autor: "David G. Allen"},
+      {texto: "Você é merecedor de descanso e gentileza.", autor: "Kristin Neff"},
+      {texto: "Não é fraqueza precisar de ajuda. É sabedoria.", autor: "Dalai Lama"},
+      {texto: "O amor também mora na escuta atenta.", autor: "Jacques Lacan"},
+      {texto: "Você é digno de amor mesmo nos dias em que não se sente assim.", autor: "John Bradshaw"},
+      {texto: "Cada passo que você dá em direção ao cuidado importa.", autor: "Martin Seligman"},
+      {texto: "Às vezes, sobreviver é o bastante.", autor: "Anne Frank"},
+      {texto: "Sua existência já é um manifesto.", autor: "Angela Davis"},
+      {texto: "Você não precisa estar inteiro para ser amado.", autor: "Donald Winnicott"},
+      {texto: "Abrace o que sente. Isso também é cura.", autor: "Carl Jung"},
+      {texto: "As pausas também fazem parte da melodia.", autor: "Friedrich Nietzsche"},
+      {texto: "Você tem valor mesmo nos dias silenciosos.", autor: "Hermann Hesse"},
+      {texto: "Sua história importa, mesmo que ela doa agora.", autor: "Jung"},
+      {texto: "Não existe forma certa de sentir. Existe verdade no que vem.", autor: "Wilhelm Reich"},
+      {texto: "Tudo bem não saber o próximo passo. O importante é continuar.", autor: "Sigmund Freud"},
+      {texto: "Mesmo as sombras fazem parte do caminho.", autor: "Carl Gustav Jung"},
+      {texto: "Você pode se refazer quantas vezes quiser.", autor: "Clarice Lispector"},
+      {texto: "Seu sentir não precisa de autorização.", autor: "Ana Cristina Cesar"},
+      {texto: "Você não é seu trauma. Você é quem sobreviveu a ele.", autor: "Bessel van der Kolk"},
+      {texto: "O autocuidado é político. Cuide-se com amor.", autor: "Grada Kilomba"},
+      {texto: "Se for preciso, recomece. Com delicadeza.", autor: "Cora Coralina"},
+      {texto: "Seu corpo merece descanso. Sua alma também.", autor: "Thich Nhat Hanh"},
+      {texto: "Sentir é a forma mais pura de existir.", autor: "Clarice Lispector"},
+      {texto: "Você não precisa entender tudo agora. Só precisa estar aqui.", autor: "Eckhart Tolle"},
+      {texto: "A vida não é corrida. É travessia.", autor: "Mia Couto"},
+      {texto: "Você é bem-vindo, mesmo nos dias nublados.", autor: "Rubem Alves"},
+      {texto: "Nenhum passo seu foi em vão.", autor: "Paulo Coelho"},
+      {texto: "Tudo bem se hoje você só conseguir existir. Isso já é muito.", autor: "Lya Luft"},
+      {texto: "Mesmo que o mundo diga o contrário, você importa.", autor: "Dostoiévski"},
+      {texto: "A ternura também é força.", autor: "Mario Quintana"},
+      {texto: "Você merece ser tratado com a mesma compaixão que oferece aos outros.", autor: "Kristin Neff"},
+      {texto: "O silêncio também comunica. E ele diz que você precisa de paz.", autor: "Clarice Lispector"},
+      {texto: "Mesmo quebrado, ainda há beleza em você.", autor: "Leonard Cohen"}
+    ];
+
+    const coresFundo = [
+      "#1e1e2f", "#2a2a3a", "#3a1e3a", "#1e3a3a", "#3a3a1e",
+      "#4a2d4a", "#2d4a4a", "#4a4a2d", "#5a3c5a", "#3c5a5a",
+      "#5a5a3c", "#6a4b6a", "#4b6a6a", "#6a6a4b", "#7a5c7a",
+      "#5c7a7a", "#7a7a5c", "#8a6d8a", "#6d8a8a", "#8a8a6d"
     ];
 
     function novaFrase() {
+      // Seleciona uma frase aleatória
       const i = Math.floor(Math.random() * frases.length);
-      document.getElementById("frase").innerText = frases[i];
+      document.getElementById("frase").innerText = frases[i].texto;
+      document.getElementById("autor").innerText = "- " + frases[i].autor;
+      
+      // Seleciona uma cor de fundo aleatória
+      const j = Math.floor(Math.random() * coresFundo.length);
+      document.body.style.backgroundColor = coresFundo[j];
     }
   </script>
 </body>
