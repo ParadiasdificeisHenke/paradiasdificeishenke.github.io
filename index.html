@@ -59,17 +59,39 @@
     .share-options {
       display: none;
       margin-top: 15px;
+      background-color: rgba(30, 30, 47, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      animation: fadeIn 0.3s ease;
     }
     .share-options a {
       color: #f0e6f6;
       margin: 0 10px;
-      font-size: 1.5em;
+      font-size: 1.2em;
       text-decoration: none;
+      transition: color 0.2s;
+      display: inline-block;
+      padding: 5px;
+    }
+    .share-options a:hover {
+      color: #a5a5d8;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     @media (max-width: 600px) {
       h1 { font-size: 1.8em; }
       #frase { font-size: 1.2em; }
       .botoes { flex-direction: column; }
+      .share-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .share-options a {
+        margin: 5px 0;
+      }
     }
   </style>
 </head>
@@ -184,7 +206,11 @@
 
     function toggleShareOptions() {
       const shareOptions = document.getElementById("shareOptions");
-      shareOptions.style.display = shareOptions.style.display === "block" ? "none" : "block";
+      if (shareOptions.style.display === "none" || !shareOptions.style.display) {
+        shareOptions.style.display = "block";
+      } else {
+        shareOptions.style.display = "none";
+      }
     }
 
     function shareOnSocial(platform) {
@@ -210,6 +236,11 @@
 
       window.open(url, '_blank', 'width=600,height=400');
     }
+
+    // Inicializa escondendo as opções de compartilhamento
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('shareOptions').style.display = 'none';
+    });
   </script>
 </body>
 </html>
