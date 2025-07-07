@@ -1,4 +1,127 @@
-<script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pérolas da Alma</title>
+  <style>
+    body {
+      color: #f0e6f6;
+      font-family: 'Georgia', serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      transition: background-color 0.5s ease;
+      background-color: #1e1e2f; /* Cor padrão inicial */
+    }
+    h1 {
+      font-size: 2.4em;
+      margin-bottom: 20px;
+    }
+    #frase {
+      font-size: 1.5em;
+      margin: 30px 0;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    #autor {
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+    .botoes {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    .share-btn {
+      background-color: #1e1e2f;
+      border: 1px solid #f0e6f6;
+    }
+    .share-options {
+      display: none;
+      margin-top: 15px;
+      background-color: rgba(30, 30, 47, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      animation: fadeIn 0.3s ease;
+    }
+    .share-options a {
+      color: #f0e6f6;
+      margin: 0 10px;
+      font-size: 1.2em;
+      text-decoration: none;
+      transition: color 0.2s;
+      display: inline-block;
+      padding: 5px;
+    }
+    .share-options a:hover {
+      color: #a5a5d8;
+    }
+    .copied-message {
+      display: none;
+      color: #4CAF50;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8em; }
+      #frase { font-size: 1.2em; }
+      .botoes { flex-direction: column; }
+      .share-options {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .share-options a {
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Pérolas da Alma</h1>
+  <div id="frase">Clique abaixo para uma frase que te abrace.</div>
+  <div id="autor"></div>
+  
+  <div class="botoes">
+    <button onclick="novaFrase()">Nova frase</button>
+    <button class="share-btn" onclick="toggleShareOptions()">Compartilhar</button>
+  </div>
+  
+  <div id="shareOptions" class="share-options">
+    <a href="#" onclick="shareOnSocial('twitter')">🐦 Twitter</a>
+    <a href="#" onclick="shareOnSocial('facebook')">📘 Facebook</a>
+    <a href="#" onclick="shareOnSocial('whatsapp')">📱 WhatsApp</a>
+    <a href="#" onclick="copyToClipboard()">📷 Instagram</a>
+    <div id="copiedMessage" class="copied-message">Frase copiada! Cole no Instagram.</div>
+  </div>
+
+  <script>
     const frases = [
       {texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.", autor: "Rubem Alves"},
       {texto: "Viver relações saudáveis não significa viver relações sem conflitos.", autor: "Ana Nunes"},
@@ -66,4 +189,84 @@
       {texto: "Permita-se o luxo de não ter respostas hoje. Algumas perguntas precisam ser vividas.", autor: "Autor desconhecido"},
       {texto: "Quando a dor sussurrar 'você não merece amor', lembre: a dor mente.", autor: "Autor desconhecido"}
     ];
-</script>
+
+    const coresFundo = [
+      "#1e1e2f", "#2a2a3a", "#3a1e3a", "#1e3a3a", "#3a3a1e",
+      "#2f1e1e", "#1e2f2f", "#3a2a3a", "#2a3a2a", "#1e3a2a",
+      "#3a1e2a", "#2a1e3a", "#1e2a3a", "#3a2a1e", "#2f3a1e"
+    ];
+
+    let fraseAtual = null;
+    let autorAtual = null;
+
+    // Inicializa a página com uma frase aleatória
+    document.addEventListener('DOMContentLoaded', function() {
+      novaFrase();
+      document.getElementById('shareOptions').style.display = 'none';
+    });
+
+    function novaFrase() {
+      const i = Math.floor(Math.random() * frases.length);
+      fraseAtual = frases[i].texto;
+      autorAtual = frases[i].autor;
+      
+      document.getElementById("frase").innerText = fraseAtual;
+      document.getElementById("autor").innerText = "- " + autorAtual;
+      
+      const j = Math.floor(Math.random() * coresFundo.length);
+      document.body.style.backgroundColor = coresFundo[j];
+      
+      document.getElementById("shareOptions").style.display = "none";
+      document.getElementById("copiedMessage").style.display = "none";
+    }
+
+    function toggleShareOptions() {
+      const shareOptions = document.getElementById("shareOptions");
+      shareOptions.style.display = shareOptions.style.display === "block" ? "none" : "block";
+    }
+
+    function shareOnSocial(platform) {
+      if (!fraseAtual || !autorAtual) {
+        alert("Por favor, gere uma frase primeiro!");
+        return;
+      }
+
+      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pérolas da Alma`;
+      let url = "";
+
+      switch(platform) {
+        case 'twitter':
+          url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
+          break;
+        case 'facebook':
+          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
+          break;
+        case 'whatsapp':
+          url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+          break;
+      }
+
+      window.open(url, '_blank', 'width=600,height=400');
+    }
+
+    function copyToClipboard() {
+      if (!fraseAtual || !autorAtual) {
+        alert("Por favor, gere uma frase primeiro!");
+        return;
+      }
+
+      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pérolas da Alma`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        const message = document.getElementById("copiedMessage");
+        message.style.display = "block";
+        setTimeout(() => {
+          message.style.display = "none";
+        }, 3000);
+      }).catch(err => {
+        console.error("Erro ao copiar texto: ", err);
+        alert("Não foi possível copiar a frase. Tente novamente.");
+      });
+    }
+  </script>
+</body>
+</html>
