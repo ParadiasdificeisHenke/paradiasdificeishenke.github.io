@@ -5,41 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pausa para sentir</title>
   <style>
+    /* Cores Modo Noturno (padrão) */
     :root {
-      --cor-texto: #f0e6f6;
-      --cor-fundo: #1e1e2f;
-      --cor-destaque: #a5a5d8;
-      --cor-botao: #444;
+      --cor-texto: #f0f0f0;
+      --cor-fundo: #1a1a2e;
+      --cor-destaque: #a78bfa;
+      --cor-botao: #4a4a6a;
+      --cor-container: #16213e;
     }
-    
+
+    /* Cores Modo Diurno */
+    body.modo-diurno {
+      --cor-texto: #333333;
+      --cor-fundo: #f8f9fa;
+      --cor-destaque: #6d28d9;
+      --cor-botao: #e0e0e0;
+      --cor-container: #ffffff;
+    }
+
     body {
       color: var(--cor-texto);
+      background-color: var(--cor-fundo);
       font-family: 'Georgia', serif;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       padding: 20px;
       text-align: center;
       transition: all 0.5s ease;
-      background: var(--cor-fundo);
     }
-    
-    body.modo-diurno {
-      --cor-texto: #333;
-      --cor-fundo: #f0e6f6;
-      --cor-destaque: #3a1e3a;
-      --cor-botao: #ddd;
-    }
-    
+
     h1 {
       font-size: 2.4em;
       margin-bottom: 30px;
-      font-weight: normal;
+      color: var(--cor-destaque);
     }
-    
+
     #frase {
       font-size: 1.5em;
       margin: 20px 0;
@@ -48,13 +52,14 @@
       transition: opacity 0.5s;
       min-height: 120px;
     }
-    
+
     #autor {
       font-style: italic;
       margin-top: 10px;
       font-size: 1.1em;
+      color: var(--cor-destaque);
     }
-    
+
     .botoes {
       display: flex;
       gap: 10px;
@@ -62,55 +67,73 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-    
+
     button {
       background-color: var(--cor-botao);
       color: var(--cor-texto);
       border: none;
       padding: 12px 24px;
       font-size: 1em;
-      border-radius: 6px;
+      border-radius: 30px;
       cursor: pointer;
       transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    
+
     button:hover {
+      transform: translateY(-2px);
       opacity: 0.9;
     }
-    
+
+    /* Sidebar de Favoritos */
     #favoritos-lista {
       position: fixed;
       top: 0;
-      right: -300px;
-      width: 280px;
+      right: -350px;
+      width: 300px;
       height: 100vh;
-      background: var(--cor-fundo);
-      border-left: 1px solid var(--cor-destaque);
-      padding: 20px;
+      background-color: var(--cor-container);
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      padding: 30px 20px;
       overflow-y: auto;
-      transition: right 0.3s;
-      z-index: 100;
+      transition: right 0.4s ease-out;
+      z-index: 1000;
+      border-left: 1px solid var(--cor-destaque);
     }
-    
+
     #favoritos-lista.aberto {
       right: 0;
     }
-    
+
     .favorito-item {
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px dashed var(--cor-destaque);
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--cor-destaque);
     }
-    
+
     .fechar-lista {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 15px;
+      right: 15px;
       background: none;
       border: none;
       color: var(--cor-destaque);
       font-size: 1.5em;
       cursor: pointer;
+    }
+
+    #favoritos-conteudo {
+      margin-top: 20px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8em; }
+      #frase { font-size: 1.2em; }
+      #favoritos-lista {
+        width: 80%;
+        right: -85%;
+      }
     }
   </style>
 </head>
@@ -123,24 +146,34 @@
   <div class="botoes">
     <button onclick="novaFrase()">Nova frase</button>
     <button onclick="salvarFavorito()">⭐ Favoritar</button>
-    <button onclick="toggleFavoritos()">📖 Meus Favoritos</button>
+    <button onclick="toggleFavoritos()">📖 Favoritos</button>
     <button onclick="alternarModo()">🌙 Modo Noturno</button>
   </div>
 
-  <!-- Lista de Favoritos (hidden por padrão) -->
+  <!-- Sidebar de Favoritos -->
   <div id="favoritos-lista">
     <button class="fechar-lista" onclick="toggleFavoritos()">×</button>
-    <h2>Minhas frases favoritas</h2>
-    <div id="favoritos-conteudo"></div>
+    <h2 style="color: var(--cor-destaque);">Seus Favoritos</h2>
+    <div id="favoritos-conteudo">
+      <p>Nenhuma frase favoritada ainda.</p>
+    </div>
   </div>
 
   <script>
-    // Frases completas
+    // Banco de frases
     const frases = [
-      {texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.", autor: "Rubem Alves"},
-      // ... (insira outras frases aqui)
+      {
+        texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.",
+        autor: "Rubem Alves"
+      },
+      {
+        texto: "Viver relações saudáveis não significa viver relações sem conflitos.",
+        autor: "Ana Nunes"
+      },
+      // Adicione mais frases conforme necessário
     ];
 
+    // Variáveis de estado
     let fraseAtual = null;
     let autorAtual = null;
     let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
@@ -153,21 +186,20 @@
       renderizarFavoritos();
     });
 
+    // Alternar entre modos
     function alternarModo() {
       modoNoturno = !modoNoturno;
-      atualizarModo();
+      document.body.classList.toggle('modo-diurno', !modoNoturno);
+      document.querySelector('button[onclick="alternarModo()"]').textContent = 
+        modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
     }
 
     function atualizarModo() {
-      if (modoNoturno) {
-        document.body.classList.add('modo-diurno');
-        document.querySelector('button[onclick="alternarModo()"]').textContent = '🌙 Modo Noturno';
-      } else {
-        document.body.classList.remove('modo-diurno');
-        document.querySelector('button[onclick="alternarModo()"]').textContent = '☀️ Modo Diurno';
-      }
+      document.querySelector('button[onclick="alternarModo()"]').textContent = 
+        modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
     }
 
+    // Gerar nova frase
     function novaFrase() {
       document.getElementById("frase").style.opacity = 0;
       
@@ -182,6 +214,7 @@
       }, 300);
     }
 
+    // Gerenciar favoritos
     function salvarFavorito() {
       if (!fraseAtual) return;
       
@@ -195,8 +228,8 @@
       if (!jaExiste) {
         favoritos.push(novaFavorita);
         localStorage.setItem('favoritos', JSON.stringify(favoritos));
-        alert("Frase favoritada com sucesso!");
         renderizarFavoritos();
+        alert("Frase favoritada!");
       } else {
         alert("Esta frase já está nos seus favoritos!");
       }
@@ -208,20 +241,20 @@
 
     function renderizarFavoritos() {
       const container = document.getElementById('favoritos-conteudo');
-      container.innerHTML = '';
       
       if (favoritos.length === 0) {
         container.innerHTML = '<p>Nenhuma frase favoritada ainda.</p>';
         return;
       }
       
+      container.innerHTML = '';
       favoritos.forEach((frase, index) => {
         const div = document.createElement('div');
         div.className = 'favorito-item';
         div.innerHTML = `
           <p>"${frase.texto}"</p>
-          <em>- ${frase.autor}</em>
-          <button onclick="removerFavorito(${index})">Remover</button>
+          <p><em>- ${frase.autor}</em></p>
+          <button onclick="removerFavorito(${index})" style="margin-top: 10px;">Remover</button>
         `;
         container.appendChild(div);
       });
@@ -231,6 +264,10 @@
       favoritos.splice(index, 1);
       localStorage.setItem('favoritos', JSON.stringify(favoritos));
       renderizarFavoritos();
+      
+      if (favoritos.length === 0) {
+        document.getElementById('favoritos-conteudo').innerHTML = '<p>Nenhuma frase favoritada ainda.</p>';
+      }
     }
   </script>
 </body>
