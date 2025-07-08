@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pausa para sentir</title>
   <style>
-    /* ===== [ESTILOS BASE] ===== */
+    /* [ESTILOS BASE] */
     body {
       font-family: 'Georgia', serif;
       display: flex;
@@ -17,13 +17,11 @@
       padding: 20px;
       text-align: center;
       transition: background 0.5s, color 0.5s;
-    }
-
-    /* ===== [MODO NOTURNO - PADRÃO] ===== */
-    body {
       background-color: #1a1a2e;
       color: #f0f0f0;
     }
+
+    /* [MODO DIURNO] */
     body.modo-diurno {
       background-color: #f8f9fa;
       color: #333;
@@ -80,7 +78,7 @@
       color: #333;
     }
 
-    /* ===== [FAVORITOS - SIDEBAR] ===== */
+    /* [FAVORITOS] */
     #favoritos-lista {
       position: fixed;
       top: 0;
@@ -103,33 +101,42 @@
       right: 0;
     }
 
-    .favorito-item {
-      margin-bottom: 20px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid #a78bfa;
+    /* [COMPARTILHAMENTO] */
+    #share-options {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.3s;
     }
-    body.modo-diurno .favorito-item {
-      border-bottom: 1px solid #6d28d9;
+    #share-options.aberto {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
     }
 
-    .fechar-lista {
-      position: absolute;
-      top: 15px;
-      right: 15px;
+    .share-btn {
       background: none;
       border: none;
-      color: #a78bfa;
-      font-size: 1.5em;
       cursor: pointer;
+      font-size: 1.8em;
+      transition: transform 0.3s;
     }
-    body.modo-diurno .fechar-lista {
-      color: #6d28d9;
+    .share-btn:hover {
+      transform: scale(1.2);
     }
 
-    /* ===== [RESPONSIVO] ===== */
+    /* [ANIMAÇÕES] */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* [RESPONSIVO] */
     @media (max-width: 600px) {
       #favoritos-lista {
-        width: 80%;
+        width: 85%;
+      }
+      #share-options.aberto {
+        flex-wrap: wrap;
       }
     }
   </style>
@@ -144,7 +151,17 @@
     <button onclick="novaFrase()">Nova frase</button>
     <button onclick="salvarFavorito()">⭐ Favoritar</button>
     <button onclick="toggleFavoritos()">📖 Favoritos (<span id="contador-favoritos">0</span>)</button>
+    <button onclick="toggleShare()">↗️ Compartilhar</button>
     <button onclick="alternarModo()">🌙 Modo Noturno</button>
+  </div>
+
+  <!-- Opções de Compartilhamento -->
+  <div id="share-options">
+    <button class="share-btn" onclick="compartilhar('whatsapp')">📱</button>
+    <button class="share-btn" onclick="compartilhar('instagram')">📷</button>
+    <button class="share-btn" onclick="compartilhar('facebook')">📘</button>
+    <button class="share-btn" onclick="compartilhar('threads')">🧵</button>
+    <button class="share-btn" onclick="compartilhar('twitter')">🐦</button>
   </div>
 
   <!-- Sidebar de Favoritos -->
@@ -155,7 +172,7 @@
   </div>
 
   <script>
-    // ===== [BANCO DE FRASES] =====
+    // [BANCO DE FRASES]
     const frases = [
       {
         texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.",
@@ -164,11 +181,10 @@
       {
         texto: "Viver relações saudáveis não significa viver relações sem conflitos.",
         autor: "Ana Nunes"
-      },
-      // Adicione mais frases aqui...
+      }
     ];
 
-    // ===== [ESTADO GLOBAL] =====
+    // [ESTADO GLOBAL]
     let estado = {
       fraseAtual: null,
       autorAtual: null,
@@ -176,35 +192,65 @@
       modoNoturno: true
     };
 
-    // ===== [INICIALIZAÇÃO] =====
+    // [INICIALIZAÇÃO]
     document.addEventListener('DOMContentLoaded', function() {
-      // Aplicar modo noturno/diurno inicial
       document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
       atualizarTextoModo();
-      
-      // Carregar primeira frase
       novaFrase();
-      
-      // Atualizar contador de favoritos
       atualizarContadorFavoritos();
     });
 
-    // ===== [FUNÇÕES PRINCIPAIS] =====
+    // [FUNÇÕES PRINCIPAIS]
     function novaFrase() {
-      // Efeito de fade out
-      document.getElementById("frase").style.opacity = 0;
+      const fraseEl = document.getElementById("frase");
+      fraseEl.style.opacity = 0;
       
       setTimeout(() => {
         const i = Math.floor(Math.random() * frases.length);
         estado.fraseAtual = frases[i].texto;
         estado.autorAtual = frases[i].autor;
         
-        document.getElementById("frase").textContent = estado.fraseAtual;
+        fraseEl.textContent = estado.fraseAtual;
         document.getElementById("autor").textContent = `- ${estado.autorAtual}`;
+        fraseEl.style.opacity = 1;
         
-        // Efeito de fade in
-        document.getElementById("frase").style.opacity = 1;
+        // Fechar compartilhamento ao mudar frase
+        document.getElementById("share-options").classList.remove("aberto");
       }, 300);
+    }
+
+    function toggleShare() {
+      document.getElementById("share-options").classList.toggle("aberto");
+    }
+
+    function compartilhar(rede) {
+      if (!estado.fraseAtual) return;
+      
+      const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir`;
+      let url = '';
+      
+      switch(rede) {
+        case 'whatsapp':
+          url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+          break;
+        case 'instagram':
+          // Instagram não permite compartilhamento direto, usa área de transferência
+          navigator.clipboard.writeText(texto)
+            .then(() => alert("Texto copiado! Cole no Instagram"))
+            .catch(() => alert("Não foi possível copiar"));
+          return;
+        case 'facebook':
+          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(texto)}`;
+          break;
+        case 'threads':
+          url = `https://www.threads.net/intent/post?text=${encodeURIComponent(texto)}`;
+          break;
+        case 'twitter':
+          url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(texto)}`;
+          break;
+      }
+      
+      if (url) window.open(url, '_blank', 'width=600,height=400');
     }
 
     function salvarFavorito() {
@@ -215,51 +261,35 @@
         autor: estado.autorAtual
       };
       
-      // Verificar se já existe
-      const jaExiste = estado.favoritos.some(f => 
-        f.texto === estado.fraseAtual && f.autor === estado.autorAtual
-      );
-      
-      if (!jaExiste) {
+      if (!estado.favoritos.some(f => f.texto === estado.fraseAtual)) {
         estado.favoritos.push(novaFavorita);
         localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
         atualizarContadorFavoritos();
         renderizarFavoritos();
-        alert("Frase favoritada com sucesso!");
+        alert("Frase favoritada!");
       } else {
-        alert("Esta frase já está nos seus favoritos!");
+        alert("Esta frase já está nos favoritos!");
       }
     }
 
     function toggleFavoritos() {
-      const lista = document.getElementById('favoritos-lista');
-      lista.classList.toggle('aberto');
-      
-      // Se estiver abrindo, renderiza os favoritos
-      if (lista.classList.contains('aberto')) {
+      document.getElementById('favoritos-lista').classList.toggle('aberto');
+      if (document.getElementById('favoritos-lista').classList.contains('aberto')) {
         renderizarFavoritos();
       }
     }
 
     function renderizarFavoritos() {
       const container = document.getElementById('favoritos-conteudo');
-      
-      if (estado.favoritos.length === 0) {
-        container.innerHTML = '<p>Nenhuma frase favoritada ainda.</p>';
-        return;
-      }
-      
-      container.innerHTML = '';
-      estado.favoritos.forEach((frase, index) => {
-        const div = document.createElement('div');
-        div.className = 'favorito-item';
-        div.innerHTML = `
-          <p>"${frase.texto}"</p>
-          <p><em>- ${frase.autor}</em></p>
-          <button onclick="removerFavorito(${index})">Remover</button>
-        `;
-        container.appendChild(div);
-      });
+      container.innerHTML = estado.favoritos.length === 0 
+        ? '<p>Nenhuma frase favoritada ainda.</p>'
+        : estado.favoritos.map((frase, index) => `
+            <div class="favorito-item">
+              <p>"${frase.texto}"</p>
+              <p><em>- ${frase.autor}</em></p>
+              <button onclick="removerFavorito(${index})">Remover</button>
+            </div>
+          `).join('');
     }
 
     function removerFavorito(index) {
@@ -275,10 +305,10 @@
       atualizarTextoModo();
     }
 
-    // ===== [FUNÇÕES AUXILIARES] =====
+    // [FUNÇÕES AUXILIARES]
     function atualizarTextoModo() {
-      const botaoModo = document.querySelector('button[onclick="alternarModo()"]');
-      botaoModo.textContent = estado.modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
+      document.querySelector('button[onclick="alternarModo()"]').textContent = 
+        estado.modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
     }
 
     function atualizarContadorFavoritos() {
