@@ -1,89 +1,679 @@
 <!DOCTYPE html>
-<html lang="pt-BR" aria-label="Página acessível">
+<html lang="pt-BR" aria-label="Aplicativo Pausa para Sentir - Frases inspiradoras">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo Acessível</title>
-    <style>
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-        
-        :focus {
-            outline: 3px solid #005A9C;
-            outline-offset: 2px;
-        }
-        
-        [aria-current="page"] {
-            font-weight: bold;
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pausa para sentir - Frases inspiradoras acessíveis</title>
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --roxo-escuro: #4c1d95;
+      --roxo-claro: #8b5cf6;
+      --roxo-suave: #c4b5fd;
+      --bg-escuro: #1e1b4b;
+      --bg-claro: #f5f3ff;
+      --texto-escuro: #e9e7ff;
+      --texto-claro: #1e1b4b;
+      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --transicao: all 0.3s ease;
+    }
+
+    /* Reset e Base Acessível */
+    body {
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      transition: var(--transicao);
+      background-color: var(--bg-escuro);
+      color: var(--texto-escuro);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* Classes de Acessibilidade */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    :focus {
+      outline: 3px solid var(--roxo-claro);
+      outline-offset: 2px;
+    }
+
+    /* Modo Diurno */
+    body.modo-diurno {
+      background-color: var(--bg-claro);
+      color: var(--texto-claro);
+    }
+
+    /* Cabeçalho */
+    header[role="banner"] {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--roxo-claro);
+    }
+
+    /* Conteúdo Principal */
+    main[role="main"] {
+      width: 100%;
+      max-width: 800px;
+    }
+
+    #frase {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin: 2rem 0;
+      max-width: 800px;
+      line-height: 1.8;
+      min-height: 180px;
+      transition: opacity 0.5s;
+      font-style: italic;
+      aria-live: "polite";
+    }
+
+    #autor {
+      font-family: 'Inter', sans-serif;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: var(--roxo-suave);
+    }
+
+    /* Botões */
+    .botoes {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background-color: var(--roxo-escuro);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transicao);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--sombra);
+    }
+
+    /* Compartilhamento */
+    #share-options {
+      display: none;
+      margin-top: 2rem;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+
+    #share-options.aberto {
+      display: flex;
+    }
+
+    .share-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 2.2rem;
+      transition: var(--transicao);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Favoritos */
+    #favoritos-lista {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 350px;
+      height: 100vh;
+      background-color: var(--bg-escuro);
+      padding: 1.5rem;
+      overflow-y: auto;
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    #favoritos-lista.aberto {
+      right: 0;
+    }
+
+    /* Acessibilidade */
+    .acessibilidade {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      display: flex;
+      gap: 0.8rem;
+      z-index: 1000;
+      background: rgba(30, 27, 75, 0.9);
+      padding: 0.8rem;
+      border-radius: 50px;
+      backdrop-filter: blur(5px);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      #frase { font-size: 1.4rem; }
+      #favoritos-lista { width: 85%; }
+      #share-options { gap: 1rem; }
+    }
+  </style>
 </head>
 <body>
-    <a href="#main" class="sr-only">Pular para conteúdo principal</a>
+  <a href="#main-content" class="sr-only">Pular para conteúdo principal</a>
+  
+  <header role="banner" aria-label="Cabeçalho do aplicativo">
+    <h1>Pausa para sentir</h1>
+  </header>
+
+  <main id="main-content" role="main" aria-label="Conteúdo principal">
+    <section aria-labelledby="frase-heading">
+      <h2 id="frase-heading" class="sr-only">Frase inspiradora</h2>
+      <div id="frase" role="alert" aria-live="assertive">Clique em "Nova frase" para começar</div>
+      <div id="autor" aria-live="polite"></div>
+    </section>
     
-    <header role="banner" aria-label="Cabeçalho">
-        <nav aria-label="Navegação principal">
-            <ul>
-                <li><a href="#" aria-current="page">Home</a></li>
-                <li><a href="#">Sobre</a></li>
-                <li><a href="#">Contato</a></li>
-            </ul>
-        </nav>
-    </header>
+    <section aria-labelledby="acoes-heading">
+      <h2 id="acoes-heading" class="sr-only">Ações disponíveis</h2>
+      <div class="botoes">
+        <button id="nova-frase" aria-label="Gerar nova frase inspiradora">
+          <i class="fas fa-sync-alt" aria-hidden="true"></i> Nova frase
+        </button>
+        <button id="favoritar" aria-label="Adicionar frase aos favoritos">
+          <i class="fas fa-star" aria-hidden="true"></i> Favoritar
+        </button>
+        <button id="ver-favoritos" aria-label="Ver frases favoritadas" aria-expanded="false" aria-controls="favoritos-lista">
+          <i class="fas fa-bookmark" aria-hidden="true"></i> Favoritos (<span id="contador-favoritos" aria-live="polite">0</span>)
+        </button>
+        <button id="compartilhar" aria-label="Compartilhar frase" aria-expanded="false" aria-controls="share-options">
+          <i class="fas fa-share-alt" aria-hidden="true"></i> Compartilhar
+        </button>
+        <button id="alternar-modo" aria-label="Alternar entre modo noturno e diurno">
+          <i class="fas fa-moon" aria-hidden="true"></i> Modo
+        </button>
+      </div>
+    </section>
 
-    <main id="main" role="main" aria-label="Conteúdo principal">
-        <article>
-            <h1 aria-label="Título da página">Bem-vindo ao nosso site acessível</h1>
-            
-            <section aria-labelledby="section1-title">
-                <h2 id="section1-title">Recursos para cegos</h2>
-                <p>Este site foi desenvolvido seguindo as diretrizes WCAG 2.1 AA.</p>
-                
-                <button aria-expanded="false" aria-controls="more-info">
-                    Mais informações
-                </button>
-                
-                <div id="more-info" hidden aria-labelledby="section1-title">
-                    <p>Recursos implementados:</p>
-                    <ul>
-                        <li>Navegação por teclado</li>
-                        <li>Leitor de tela otimizado</li>
-                        <li>Contraste elevado</li>
-                        <li>Semântica HTML completa</li>
-                    </ul>
-                </div>
-            </section>
-        </article>
-    </main>
+    <section aria-labelledby="compartilhamento-heading">
+      <h2 id="compartilhamento-heading" class="sr-only">Opções de compartilhamento</h2>
+      <div id="share-options" role="region">
+        <button class="share-btn" aria-label="Compartilhar no WhatsApp" onclick="compartilhar('whatsapp')">
+          <i class="fab fa-whatsapp" aria-hidden="true"></i>
+        </button>
+        <button class="share-btn" aria-label="Compartilhar no Instagram" onclick="compartilhar('instagram')">
+          <i class="fab fa-instagram" aria-hidden="true"></i>
+        </button>
+        <button class="share-btn" aria-label="Compartilhar no Facebook" onclick="compartilhar('facebook')">
+          <i class="fab fa-facebook" aria-hidden="true"></i>
+        </button>
+        <button class="share-btn" aria-label="Compartilhar no Threads" onclick="compartilhar('threads')">
+          <i class="fab fa-threads" aria-hidden="true"></i>
+        </button>
+        <button class="share-btn" aria-label="Compartilhar no Twitter" onclick="compartilhar('twitter')">
+          <i class="fab fa-twitter" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+  </main>
 
-    <footer role="contentinfo" aria-label="Rodapé">
-        <p>© 2023 Site Acessível</p>
-    </footer>
+  <aside id="favoritos-lista" role="dialog" aria-modal="true" aria-labelledby="favoritos-titulo" hidden>
+    <div style="position: relative;">
+      <button id="fechar-favoritos" aria-label="Fechar lista de favoritos" style="position: absolute; top: 0; right: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer;">×</button>
+      <h2 id="favoritos-titulo"><i class="fas fa-bookmark" aria-hidden="true"></i> Seus Favoritos</h2>
+    </div>
+    <div id="favoritos-conteudo" aria-live="polite"></div>
+    
+    <div class="export-options" style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center;">
+      <button onclick="exportarFavoritos('json')" aria-label="Exportar favoritos como JSON">
+        <i class="fas fa-file-code" aria-hidden="true"></i> JSON
+      </button>
+      <button onclick="exportarFavoritos('txt')" aria-label="Exportar favoritos como texto">
+        <i class="fas fa-file-alt" aria-hidden="true"></i> TXT
+      </button>
+    </div>
+  </aside>
 
-    <script>
-        // Script para acessibilidade
-        document.querySelector('button').addEventListener('click', function() {
-            const expanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', !expanded);
-            document.getElementById('more-info').hidden = expanded;
-        });
+  <div class="acessibilidade" role="toolbar" aria-label="Ferramentas de acessibilidade">
+    <button title="Aumentar fonte (Ctrl + +)" aria-label="Aumentar tamanho do texto" onclick="ajustarFonte(1)">
+      <i class="fas fa-plus" aria-hidden="true"></i>
+    </button>
+    <button title="Diminuir fonte (Ctrl + -)" aria-label="Diminuir tamanho do texto" onclick="ajustarFonte(-1)">
+      <i class="fas fa-minus" aria-hidden="true"></i>
+    </button>
+    <button title="Ler em voz alta (Ctrl + L)" aria-label="Ler frase em voz alta" onclick="lerTexto()">
+      <i class="fas fa-volume-up" aria-hidden="true"></i>
+    </button>
+    <button title="Parar leitura" aria-label="Parar leitura em voz alta" onclick="pararLeitura()">
+      <i class="fas fa-stop" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <script>
+    // Banco de frases
+    const frases = [
+      {
+        texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.",
+        autor: "Rubem Alves"
+      },
+      {
+        texto: "Viver relações saudáveis não significa viver relações sem conflitos.",
+        autor: "Ana Nunes"
+      }
+    ];
+
+    // Estado global
+    let estado = {
+      fraseAtual: null,
+      autorAtual: null,
+      favoritos: JSON.parse(localStorage.getItem('favoritos')) || [],
+      modoNoturno: true,
+      tamanhoFonte: 16,
+      synth: window.speechSynthesis,
+      utterance: null,
+      ultimoFoco: null
+    };
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+      document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
+      novaFrase();
+      atualizarContadorFavoritos();
+      
+      // Restaurar tamanho da fonte
+      const tamanhoSalvo = localStorage.getItem('tamanhoFonte');
+      if (tamanhoSalvo) {
+        estado.tamanhoFonte = parseInt(tamanhoSalvo);
+        document.body.style.fontSize = estado.tamanhoFonte + 'px';
+      }
+      
+      // Atalhos de teclado
+      document.addEventListener('keydown', function(e) {
+        // Ctrl + + para aumentar fonte
+        if (e.ctrlKey && (e.key === '+' || e.key === '=')) {
+          e.preventDefault();
+          ajustarFonte(1);
+        }
+        // Ctrl + - para diminuir fonte
+        if (e.ctrlKey && e.key === '-') {
+          e.preventDefault();
+          ajustarFonte(-1);
+        }
+        // Ctrl + L para ler texto
+        if (e.ctrlKey && e.key.toLowerCase() === 'l') {
+          e.preventDefault();
+          lerTexto();
+        }
+        // Esc para fechar modais
+        if (e.key === 'Escape') {
+          if (document.getElementById('favoritos-lista').classList.contains('aberto')) {
+            toggleFavoritos();
+          }
+          if (document.getElementById('share-options').classList.contains('aberto')) {
+            toggleShare();
+          }
+        }
+      });
+
+      // Event listeners
+      document.getElementById('nova-frase').addEventListener('click', novaFrase);
+      document.getElementById('favoritar').addEventListener('click', salvarFavorito);
+      document.getElementById('ver-favoritos').addEventListener('click', toggleFavoritos);
+      document.getElementById('compartilhar').addEventListener('click', toggleShare);
+      document.getElementById('alternar-modo').addEventListener('click', alternarModo);
+      document.getElementById('fechar-favoritos').addEventListener('click', toggleFavoritos);
+    });
+
+    // Funções principais
+    function novaFrase() {
+      const fraseEl = document.getElementById("frase");
+      fraseEl.style.opacity = 0;
+      
+      setTimeout(() => {
+        const i = Math.floor(Math.random() * frases.length);
+        estado.fraseAtual = frases[i].texto;
+        estado.autorAtual = frases[i].autor;
         
-        // Gerenciamento de foco
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-                console.log('Navegação por teclado ativa');
+        fraseEl.textContent = estado.fraseAtual;
+        document.getElementById("autor").textContent = `- ${estado.autorAtual}`;
+        fraseEl.style.opacity = 1;
+        
+        document.getElementById("share-options").classList.remove("aberto");
+        document.getElementById('compartilhar').setAttribute('aria-expanded', 'false');
+        
+        if (estado.synth.speaking) {
+          estado.synth.cancel();
+        }
+        
+        // Anuncia a nova frase para leitores de tela
+        const anuncio = document.createElement('div');
+        anuncio.setAttribute('aria-live', 'assertive');
+        anuncio.className = 'sr-only';
+        anuncio.textContent = `Nova frase: ${estado.fraseAtual} por ${estado.autorAtual}`;
+        document.body.appendChild(anuncio);
+        setTimeout(() => anuncio.remove(), 100);
+      }, 300);
+    }
+
+    function toggleShare() {
+      const shareOptions = document.getElementById("share-options");
+      const isAberto = shareOptions.classList.toggle("aberto");
+      document.getElementById('compartilhar').setAttribute('aria-expanded', isAberto.toString());
+      
+      if (isAberto) {
+        estado.ultimoFoco = document.activeElement;
+        document.querySelector('.share-btn').focus();
+      } else if (estado.ultimoFoco) {
+        estado.ultimoFoco.focus();
+      }
+    }
+
+    function compartilhar(rede) {
+      if (!estado.fraseAtual) return;
+      
+      const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir`;
+      let url = '';
+      
+      switch(rede) {
+        case 'whatsapp':
+          url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+          break;
+        case 'instagram':
+          navigator.clipboard.writeText(texto)
+            .then(() => {
+              const msg = document.createElement('div');
+              msg.setAttribute('aria-live', 'assertive');
+              msg.className = 'sr-only';
+              msg.textContent = 'Texto copiado para a área de transferência, cole no Instagram';
+              document.body.appendChild(msg);
+              setTimeout(() => msg.remove(), 100);
+            })
+            .catch(() => {
+              const msg = document.createElement('div');
+              msg.setAttribute('aria-live', 'assertive');
+              msg.className = 'sr-only';
+              msg.textContent = 'Não foi possível copiar o texto';
+              document.body.appendChild(msg);
+              setTimeout(() => msg.remove(), 100);
+            });
+          return;
+        case 'facebook':
+          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(texto)}`;
+          break;
+        case 'threads':
+          url = `https://www.threads.net/intent/post?text=${encodeURIComponent(texto)}`;
+          break;
+        case 'twitter':
+          url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(texto)}`;
+          break;
+      }
+      
+      if (url) window.open(url, '_blank', 'width=600,height=400');
+    }
+
+    function salvarFavorito() {
+      if (!estado.fraseAtual) return;
+      
+      const novaFavorita = {
+        texto: estado.fraseAtual,
+        autor: estado.autorAtual,
+        data: new Date().toLocaleDateString()
+      };
+      
+      if (!estado.favoritos.some(f => f.texto === estado.fraseAtual)) {
+        estado.favoritos.push(novaFavorita);
+        localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
+        atualizarContadorFavoritos();
+        
+        // Feedback para leitor de tela
+        const msg = document.createElement('div');
+        msg.setAttribute('aria-live', 'assertive');
+        msg.className = 'sr-only';
+        msg.textContent = 'Frase adicionada aos favoritos';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 100);
+      } else {
+        const msg = document.createElement('div');
+        msg.setAttribute('aria-live', 'assertive');
+        msg.className = 'sr-only';
+        msg.textContent = 'Esta frase já está nos favoritos';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 100);
+      }
+    }
+
+    function toggleFavoritos() {
+      const lista = document.getElementById('favoritos-lista');
+      const botao = document.getElementById('ver-favoritos');
+      const isAberto = lista.classList.toggle('aberto');
+      
+      botao.setAttribute('aria-expanded', isAberto.toString());
+      lista.hidden = !isAberto;
+      
+      if (isAberto) {
+        estado.ultimoFoco = document.activeElement;
+        lista.focus();
+        renderizarFavoritos();
+        
+        // Trap de foco dentro do modal
+        lista.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+            const focusableElements = lista.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            
+            if (e.shiftKey && document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            } else if (!e.shiftKey && document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
             }
+          }
         });
-    </script>
+      } else if (estado.ultimoFoco) {
+        estado.ultimoFoco.focus();
+      }
+    }
+
+    function renderizarFavoritos() {
+      const container = document.getElementById('favoritos-conteudo');
+      container.innerHTML = estado.favoritos.length === 0 
+        ? '<p style="text-align: center;">Nenhuma frase favoritada ainda.</p>'
+        : estado.favoritos.map((frase, index) => `
+            <div style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <p>"${frase.texto}"</p>
+              <p><em>- ${frase.autor}</em></p>
+              <small>${frase.data}</small>
+              <button onclick="removerFavorito(${index})" style="margin-top: 0.5rem;" aria-label="Remover frase dos favoritos">
+                <i class="fas fa-trash" aria-hidden="true"></i> Remover
+              </button>
+            </div>
+          `).join('');
+    }
+
+    function removerFavorito(index) {
+      estado.favoritos.splice(index, 1);
+      localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
+      renderizarFavoritos();
+      atualizarContadorFavoritos();
+      
+      // Feedback para leitor de tela
+      const msg = document.createElement('div');
+      msg.setAttribute('aria-live', 'assertive');
+      msg.className = 'sr-only';
+      msg.textContent = 'Frase removida dos favoritos';
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 100);
+    }
+
+    function alternarModo() {
+      estado.modoNoturno = !estado.modoNoturno;
+      document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
+      
+      const botao = document.getElementById('alternar-modo');
+      const icone = botao.querySelector('i');
+      
+      if (estado.modoNoturno) {
+        icone.classList.replace('fa-sun', 'fa-moon');
+        botao.innerHTML = '<i class="fas fa-moon" aria-hidden="true"></i> Modo Noturno';
+      } else {
+        icone.classList.replace('fa-moon', 'fa-sun');
+        botao.innerHTML = '<i class="fas fa-sun" aria-hidden="true"></i> Modo Diurno';
+      }
+      
+      // Feedback para leitor de tela
+      const msg = document.createElement('div');
+      msg.setAttribute('aria-live', 'polite');
+      msg.className = 'sr-only';
+      msg.textContent = estado.modoNoturno ? 'Modo noturno ativado' : 'Modo diurno ativado';
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 100);
+    }
+
+    // Acessibilidade
+    function ajustarFonte(direcao) {
+      const incremento = 4;
+      const minSize = 12;
+      const maxSize = 28;
+      
+      estado.tamanhoFonte += (direcao * incremento);
+      
+      if (estado.tamanhoFonte < minSize) estado.tamanhoFonte = minSize;
+      if (estado.tamanhoFonte > maxSize) estado.tamanhoFonte = maxSize;
+      
+      document.body.style.fontSize = estado.tamanhoFonte + 'px';
+      localStorage.setItem('tamanhoFonte', estado.tamanhoFonte);
+      
+      // Feedback para leitor de tela
+      const msg = document.createElement('div');
+      msg.setAttribute('aria-live', 'polite');
+      msg.className = 'sr-only';
+      msg.textContent = `Tamanho da fonte ajustado para ${estado.tamanhoFonte} pixels`;
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 100);
+    }
+
+    function lerTexto() {
+      if (estado.synth.speaking) {
+        estado.synth.cancel();
+        return;
+      }
+      
+      if (!estado.fraseAtual) return;
+      
+      const texto = `${estado.fraseAtual}. Por ${estado.autorAtual}.`;
+      estado.utterance = new SpeechSynthesisUtterance(texto);
+      estado.utterance.lang = 'pt-BR';
+      
+      // Configurar voz feminina se disponível
+      const voices = estado.synth.getVoices();
+      const femaleVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Female'));
+      if (femaleVoice) {
+        estado.utterance.voice = femaleVoice;
+      }
+      
+      estado.synth.speak(estado.utterance);
+      
+      // Feedback visual
+      const btn = document.querySelector('.acessibilidade button[onclick="lerTexto()"]');
+      btn.innerHTML = '<i class="fas fa-volume-up" style="animation: pulse 1.5s infinite;"></i>';
+      
+      estado.utterance.onend = function() {
+        btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      };
+    }
+
+    function pararLeitura() {
+      if (estado.synth.speaking) {
+        estado.synth.cancel();
+        
+        // Feedback para leitor de tela
+        const msg = document.createElement('div');
+        msg.setAttribute('aria-live', 'assertive');
+        msg.className = 'sr-only';
+        msg.textContent = 'Leitura interrompida';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 100);
+      }
+    }
+
+    function exportarFavoritos(formato) {
+      if (estado.favoritos.length === 0) {
+        const msg = document.createElement('div');
+        msg.setAttribute('aria-live', 'assertive');
+        msg.className = 'sr-only';
+        msg.textContent = 'Nenhum favorito para exportar';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 100);
+        return;
+      }
+      
+      let conteudo, tipoMime, extensao;
+      
+      if (formato === 'json') {
+        conteudo = JSON.stringify(estado.favoritos, null, 2);
+        tipoMime = 'application/json';
+        extensao = 'json';
+      } else {
+        conteudo = estado.favoritos.map(f => `"${f.texto}"\n- ${f.autor}\n${f.data}\n`).join('\n');
+        tipoMime = 'text/plain';
+        extensao = 'txt';
+      }
+      
+      const blob = new Blob([conteudo], { type: tipoMime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `frases-favoritas.${extensao}`;
+      a.click();
+      
+      // Feedback para leitor de tela
+      const msg = document.createElement('div');
+      msg.setAttribute('aria-live', 'polite');
+      msg.className = 'sr-only';
+      msg.textContent = `Favoritos exportados como ${extensao.toUpperCase()}`;
+      document.body.appendChild(msg);
+      setTimeout(() => msg.remove(), 100);
+    }
+
+    function atualizarContadorFavoritos() {
+      const contador = document.getElementById('contador-favoritos');
+      contador.textContent = estado.favoritos.length;
+    }
+  </script>
 </body>
 </html>
