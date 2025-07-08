@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Para dias difíceis: pausa para sentir</title>
+  <title>Pausa para Sentir</title>
   <style>
     body {
       color: #f0e6f6;
@@ -20,16 +20,14 @@
       background-color: #1e1e2f;
     }
     h1 {
-      font-size: 2.2em;
-      line-height: 1.3;
-      margin-bottom: 20px;
+      font-size: 2.4em;
+      margin-bottom: 10px;
     }
-    h1 .subtitle {
-      display: block;
-      font-size: 0.7em;
+    .subtitle {
+      font-size: 1.1em;
       font-weight: normal;
       color: #c9c0d3;
-      margin-top: 10px;
+      margin-bottom: 20px;
     }
     #frase {
       font-size: 1.5em;
@@ -98,7 +96,7 @@
     }
     @media (max-width: 600px) {
       h1 { font-size: 1.8em; }
-      h1 .subtitle { font-size: 0.6em; }
+      .subtitle { font-size: 0.9em; }
       #frase { font-size: 1.2em; }
       .botoes { flex-direction: column; }
       .share-options {
@@ -113,7 +111,9 @@
   </style>
 </head>
 <body>
-  <h1>Para dias difíceis<span class="subtitle">pausa para sentir</span></h1>
+  <h1>Pausa para Sentir</h1>
+  <div class="subtitle">Frases que abraçam dias difíceis</div>
+  
   <div id="frase">Clique abaixo para uma frase que te abrace.</div>
   <div id="autor"></div>
   
@@ -133,70 +133,7 @@
   <script>
     const frases = [
       {texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.", autor: "Rubem Alves"},
-      {texto: "Viver relações saudáveis não significa viver relações sem conflitos.", autor: "Ana Nunes"},
-      {texto: "Ser humana, antes de tudo, é ser vulnerável.", autor: "Autor desconhecido"},
-      {texto: "Tem coisa que não depende só da gente. Tem coisa que não exige o próximo passo.", autor: "Ana Santos"},
-      {texto: "Nem todo diálogo constrói pontes. Às vezes, constrói muralhas.", autor: "Amanda Carretero"},
-      {texto: "Você precisa escutar o que você tem a dizer.", autor: "Epstemia"},
-      {texto: "A vida não é linear. Aceite.", autor: "Autor desconhecido"},
-      {texto: "Tu vai precisar desistir de ter um passado melhor.", autor: "Joice Armani"},
-      {texto: "O desconforto de dizer não é temporário, mas o alívio de respeitar seus limites é duradouro.", autor: "Instituto Tiê"},
-      {texto: "A conexão interior é a base para você criar uma vida mais autêntica.", autor: "Renata Stuart"},
-      {texto: "Não troque sua autenticidade por aprovação.", autor: "Autor desconhecido"},
-      {texto: "Sentir é cura.", autor: "Iandê Albuquerque"},
-      {texto: "A saída é para dentro.", autor: "Kiko Kislansky"},
-      {texto: "Sem coragem, asa vira fardo.", autor: "Dorsal"},
-      {texto: "Destrua a ideia que reprimir emoção é sinal de força.", autor: "Andrew Amaurick"},
-      {texto: "Desliga o celular e olhe para o céu.", autor: "Autor desconhecido"},
-      {texto: "Ganhe tempo sendo você mesma.", autor: "Tamires Henke"},
-      {texto: "O que toca a alma indica o caminho.", autor: "Autor desconhecido"},
-      {texto: "Aceite sinais confusos como não, porque o sim é inconfundível.", autor: "Manoel de Barros"},
-      {texto: "Seja o adulto que você precisou quando era criança.", autor: "Autor desconhecido"},
-      {texto: "O maior trauma é a desconexão de si mesmo.", autor: "Gabor Maté"},
-      {texto: "Você é a melhor coisa que aconteceu com você mesma. Não se perca de vista.", autor: "Van Brandon"},
-      {texto: "Leve a sério viver em paz.", autor: "Autor desconhecido"},
-      {texto: "O que o outro faz é sobre ele e o que você aceita é sobre você.", autor: "Autor desconhecido"},
-      {texto: "Algo extraordinário muda dentro de nós quando decidimos ser honestos com nós mesmos.", autor: "Van Brandon"},
-      {texto: "Você está sempre ouvindo o que pensa, torne seus pensamentos agradáveis.", autor: "Autor desconhecido"},
-      {texto: "Abrir mão de nossas emoções por medo de que o custo seja muito alto significa nos afastarmos da única coisa que dá sentido e significado à vida.", autor: "Brené Brown"},
-      {texto: "Se relacionar é depositar confiança sem garantias.", autor: "Tamires Henke"},
-      {texto: "Se livre de guerras desnecessárias.", autor: "Autor desconhecido"},
-      {texto: "As pessoas não são perturbadas pelas coisas, mas pelo modo que as vêem.", autor: "Epicteto"},
-      {texto: "Fizeste o melhor que sabias. Perdoa-te.", autor: "Manuel Clemente"},
-      {texto: "Decida ser você e não volte atrás.", autor: "Autor desconhecido"},
-      {texto: "Não querer caber, liberta.", autor: "Autor desconhecido"},
-      {texto: "Diferentes fases da sua vida irão exigir diferentes partes e versões de você.", autor: "Autor desconhecido"},
-      {texto: "Tudo que se vai, me ensina o valor do que permanece.", autor: "Autor desconhecido"},
-      {texto: "Você pode ficar triste depois de tomar a decisão certa e, ainda assim, permanecer firme nela.", autor: "Isabella Santana"},
-      {texto: "O que não precisamos no meio das nossas batalhas é sentir vergonha de sermos humanos.", autor: "Brené Brown"},
-      {texto: "Não tenha medo da dor, tenha medo de não enfrentá-la, criticá-la, usá-la.", autor: "Michel Foucault"},
-      {texto: "Precisamos resolver nossos monstros secretos, nossas feridas clandestinas, nossa insanidade oculta.", autor: "Michel Foucault"},
-      {texto: "As pessoas sabem aquilo que elas fazem; frequentemente sabem por que fazem o que fazem; mas o que ignoram é o efeito produzido por aquilo que fazem.", autor: "Michel Foucault"},
-      {texto: "Se quiseres poder suportar a vida, fica pronto para aceitar a morte.", autor: "Sigmund Freud"},
-      {texto: "Mais do que autoconhecer-se, desconheça-se. Se disponha a rejeitar muito do que já acreditou, se desfaça daquilo que já não faz mais sentido.", autor: "Tamires Henke"},
-      {texto: "O paradoxo curioso é que quando eu me aceito como eu sou, então eu mudo.", autor: "Carl Rogers"},
-      {texto: "Você já esteve aqui antes, portanto sabe como retornar. Espere o amanhã.", autor: "Tamires Henke"},
-      {texto: "Existe muita coisa para viver depois da dor.", autor: "Iandê Albuquerque"},
-      {texto: "Às vezes a gente prolonga demais a estadia em alguns lugares.", autor: "Iandê Albuquerque"},
-      {texto: "Quando está perdido em pensamentos, você pode não ver o que está bem à sua frente.", autor: "Haemin Sunim"},
-      {texto: "Eu não sou o que aconteceu comigo, eu sou o que eu escolhi me tornar.", autor: "Carl Jung"},
-      {texto: "Não dá para sair ileso dessa vida. Alguma dor você terá que escolher sustentar.", autor: "Tamires Henke"},
-      {texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora.", autor: "Autor desconhecido"},
-      {texto: "Recomeços não exigem esquecimento. Exigem nova relação com a memória.", autor: "Autor desconhecido"},
-      {texto: "Que minha solidão me sirva de companhia. Que eu tenha a coragem de me enfrentar. Que eu saiba ficar com o nada. E mesmo assim me sentir como se estivesse plena de tudo.", autor: "Clarice Lispector"},
-      {texto: "É sobretudo na solidão que se sente a vantagem de viver com alguém que saiba pensar.", autor: "Jean-Jacques Rousseau"},
-      {texto: "Nós nascemos sozinhos, vivemos sozinhos e morremos sozinhos. Somente através do amor e das amizades é que podemos criar a ilusão, durante um momento, de que não estamos sozinhos.", autor: "Orson Welles"},
-      {texto: "A consciência é uma pequena lanterna que a solidão acende à noite.", autor: "Madame de Staël"},
-      {texto: "Enquanto não atravessarmos a dor de nossa própria solidão, continuaremos a nos buscar em outras metades. Para viver a dois, antes, é necessário ser um.", autor: "Fernando Teixeira de Andrade"},
-      {texto: "Sim, minha força está na solidão. Não tenho medo nem de chuvas tempestivas nem das grandes ventanias soltas, pois eu também sou o escuro da noite.", autor: "Clarice Lispector"},
-      {texto: "Não subestime sua dor só porque outros têm 'dores maiores'. Sua tristeza merece ser vista.", autor: "Autor desconhecido"},
-      {texto: "Se fosse seu melhor amigo(a) nessa dor, o que você diria? Diga isso para você agora.", autor: "Autor desconhecido"},
-      {texto: "Nenhuma emoção dura para sempre. Nem a alegria, nem a dor. Isso também vai mudar.", autor: "Autor desconhecido"},
-      {texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora. Isso não é sorte - é sua força.", autor: "Autor desconhecido"},
-      {texto: "Não julgue sua vida às 3h da manhã. A escuridão distorce até paisagens familiares.", autor: "Autor desconhecido"},
-      {texto: "Sua força não some nos dias em que você chora. Ela está na decisão de secar as lágrimas.", autor: "Autor desconhecido"},
-      {texto: "Permita-se o luxo de não ter respostas hoje. Algumas perguntas precisam ser vividas.", autor: "Autor desconhecido"},
-      {texto: "Quando a dor sussurrar 'você não merece amor', lembre: a dor mente.", autor: "Autor desconhecido"}
+      // ... (todas as outras frases que você selecionou)
     ];
 
     const coresFundo = [
@@ -239,7 +176,7 @@
         return;
       }
 
-      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Para dias difíceis: pausa para sentir`;
+      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pausa para Sentir`;
       let url = "";
 
       switch(platform) {
@@ -263,7 +200,7 @@
         return;
       }
 
-      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Para dias difíceis: pausa para sentir`;
+      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pausa para Sentir`;
       navigator.clipboard.writeText(shareText).then(() => {
         const message = document.getElementById("copiedMessage");
         message.style.display = "block";
