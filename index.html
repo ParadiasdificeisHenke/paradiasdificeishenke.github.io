@@ -6,9 +6,10 @@
   <title>Pausa para sentir</title>
   <style>
     :root {
-      --cor-base: #1e1e2f;
-      --cor-destaque: #a5a5d8;
       --cor-texto: #f0e6f6;
+      --cor-fundo: #1e1e2f;
+      --cor-destaque: #a5a5d8;
+      --cor-botao: #444;
     }
     
     body {
@@ -23,14 +24,20 @@
       padding: 20px;
       text-align: center;
       transition: all 0.5s ease;
-      background: linear-gradient(135deg, var(--cor-base) 0%, #3a1e3a 100%);
+      background: var(--cor-fundo);
+    }
+    
+    body.modo-diurno {
+      --cor-texto: #333;
+      --cor-fundo: #f0e6f6;
+      --cor-destaque: #3a1e3a;
+      --cor-botao: #ddd;
     }
     
     h1 {
       font-size: 2.4em;
       margin-bottom: 30px;
       font-weight: normal;
-      opacity: 0.9;
     }
     
     #frase {
@@ -38,17 +45,14 @@
       margin: 20px 0;
       max-width: 600px;
       line-height: 1.6;
-      transition: opacity 0.5s, transform 0.5s;
+      transition: opacity 0.5s;
       min-height: 120px;
-      display: flex;
-      align-items: center;
     }
     
     #autor {
       font-style: italic;
       margin-top: 10px;
       font-size: 1.1em;
-      opacity: 0.8;
     }
     
     .botoes {
@@ -60,102 +64,53 @@
     }
     
     button {
-      background-color: #444;
-      color: #fff;
+      background-color: var(--cor-botao);
+      color: var(--cor-texto);
       border: none;
       padding: 12px 24px;
       font-size: 1em;
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s;
-      animation: respirar 4s infinite ease-in-out;
     }
     
     button:hover {
-      background-color: #666;
-      transform: translateY(-2px);
+      opacity: 0.9;
     }
     
-    .share-btn {
-      background-color: var(--cor-base);
-      border: 1px solid var(--cor-destaque);
+    #favoritos-lista {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      height: 100vh;
+      background: var(--cor-fundo);
+      border-left: 1px solid var(--cor-destaque);
+      padding: 20px;
+      overflow-y: auto;
+      transition: right 0.3s;
+      z-index: 100;
     }
     
-    .share-options {
-      display: none;
-      margin-top: 15px;
-      background-color: rgba(30, 30, 47, 0.9);
-      padding: 15px;
-      border-radius: 8px;
-      animation: fadeIn 0.3s ease;
+    #favoritos-lista.aberto {
+      right: 0;
     }
     
-    .share-options a {
-      color: var(--cor-texto);
-      margin: 0 10px;
-      text-decoration: none;
-      transition: color 0.2s;
-      font-size: 1.1em;
+    .favorito-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed var(--cor-destaque);
     }
     
-    .share-options a:hover {
+    .fechar-lista {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
       color: var(--cor-destaque);
-    }
-    
-    .progresso-container {
-      width: 80%;
-      max-width: 400px;
-      height: 6px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-      margin-top: 30px;
-    }
-    
-    .progresso {
-      height: 100%;
-      width: 0%;
-      background: var(--cor-destaque);
-      border-radius: 3px;
-      transition: width 0.5s ease;
-    }
-    
-    .copied-message {
-      display: none;
-      color: #4CAF50;
-      margin-top: 10px;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes respirar {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-    
-    @keyframes piscar {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    
-    @media (max-width: 600px) {
-      h1 { font-size: 1.8em; }
-      #frase { font-size: 1.2em; min-height: 150px; }
-      .botoes { flex-direction: column; }
-      .share-options {
-        flex-direction: column;
-        gap: 10px;
-      }
-    }
-    
-    @media print {
-      body { 
-        background: white !important; 
-        color: black !important; 
-      }
-      button, .progresso-container { display: none; }
+      font-size: 1.5em;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -168,62 +123,52 @@
   <div class="botoes">
     <button onclick="novaFrase()">Nova frase</button>
     <button onclick="salvarFavorito()">⭐ Favoritar</button>
-    <button class="share-btn" onclick="toggleShareOptions()">Compartilhar</button>
+    <button onclick="toggleFavoritos()">📖 Meus Favoritos</button>
     <button onclick="alternarModo()">🌙 Modo Noturno</button>
   </div>
-  
-  <div id="shareOptions" class="share-options">
-    <a href="#" onclick="shareOnSocial('twitter')">Twitter</a>
-    <a href="#" onclick="shareOnSocial('facebook')">Facebook</a>
-    <a href="#" onclick="shareOnSocial('whatsapp')">WhatsApp</a>
-    <a href="#" onclick="copyToClipboard()">Instagram</a>
-    <div id="copiedMessage" class="copied-message">Frase copiada!</div>
-  </div>
-  
-  <div class="progresso-container">
-    <div class="progresso"></div>
+
+  <!-- Lista de Favoritos (hidden por padrão) -->
+  <div id="favoritos-lista">
+    <button class="fechar-lista" onclick="toggleFavoritos()">×</button>
+    <h2>Minhas frases favoritas</h2>
+    <div id="favoritos-conteudo"></div>
   </div>
 
   <script>
     // Frases completas
     const frases = [
       {texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.", autor: "Rubem Alves"},
-      // ... (insira todas as outras frases aqui)
+      // ... (insira outras frases aqui)
     ];
 
-    const coresFundo = [
-      "#1e1e2f", "#2a2a3a", "#3a1e3a", "#1e3a3a", "#3a3a1e",
-      "#2f1e1e", "#1e2f2f", "#3a2a3a", "#2a3a2a", "#1e3a2a"
-    ];
-
-    let frasesVistas = 0;
     let fraseAtual = null;
     let autorAtual = null;
     let favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-    let modoNoturno = false;
+    let modoNoturno = true; // Começa no modo noturno
 
     // Inicialização
     document.addEventListener('DOMContentLoaded', function() {
-      verificarModoAutomatico();
+      atualizarModo();
       novaFrase();
+      renderizarFavoritos();
     });
 
-    function verificarModoAutomatico() {
-      const hora = new Date().getHours();
-      if (hora > 18 || hora < 6) {
-        alternarModo(true);
+    function alternarModo() {
+      modoNoturno = !modoNoturno;
+      atualizarModo();
+    }
+
+    function atualizarModo() {
+      if (modoNoturno) {
+        document.body.classList.add('modo-diurno');
+        document.querySelector('button[onclick="alternarModo()"]').textContent = '🌙 Modo Noturno';
+      } else {
+        document.body.classList.remove('modo-diurno');
+        document.querySelector('button[onclick="alternarModo()"]').textContent = '☀️ Modo Diurno';
       }
     }
 
-    function alternarModo(forcarNoturno = false) {
-      modoNoturno = forcarNoturno ? true : !modoNoturno;
-      document.body.classList.toggle('noturno', modoNoturno);
-      document.querySelector('button[onclick="alternarModo()"]').textContent = 
-        modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
-    }
-
     function novaFrase() {
-      // Efeito de transição
       document.getElementById("frase").style.opacity = 0;
       
       setTimeout(() => {
@@ -234,17 +179,6 @@
         document.getElementById("frase").innerText = fraseAtual;
         document.getElementById("autor").innerText = "- " + autorAtual;
         document.getElementById("frase").style.opacity = 1;
-        
-        // Mudar cor de fundo
-        const j = Math.floor(Math.random() * coresFundo.length);
-        document.body.style.background = `linear-gradient(135deg, ${coresFundo[j]} 0%, ${coresFundo[(j+3)%coresFundo.length]} 100%)`;
-        
-        // Atualizar progresso
-        frasesVistas = Math.min(frasesVistas + 1, frases.length);
-        document.querySelector('.progresso').style.width = `${(frasesVistas / frases.length) * 100}%`;
-        
-        // Esconder opções de compartilhamento
-        document.getElementById("shareOptions").style.display = "none";
       }, 300);
     }
 
@@ -252,75 +186,51 @@
       if (!fraseAtual) return;
       
       const novaFavorita = { texto: fraseAtual, autor: autorAtual };
-      if (!favoritos.some(f => f.texto === fraseAtual)) {
+      
+      // Verifica se já existe
+      const jaExiste = favoritos.some(f => 
+        f.texto === fraseAtual && f.autor === autorAtual
+      );
+      
+      if (!jaExiste) {
         favoritos.push(novaFavorita);
         localStorage.setItem('favoritos', JSON.stringify(favoritos));
-        alert("Frase favoritada!");
+        alert("Frase favoritada com sucesso!");
+        renderizarFavoritos();
       } else {
-        alert("Esta frase já está nos favoritos");
+        alert("Esta frase já está nos seus favoritos!");
       }
     }
 
-    function toggleShareOptions() {
-      const shareOptions = document.getElementById("shareOptions");
-      shareOptions.style.display = shareOptions.style.display === "block" ? "none" : "block";
+    function toggleFavoritos() {
+      document.getElementById('favoritos-lista').classList.toggle('aberto');
     }
 
-    function shareOnSocial(platform) {
-      if (!fraseAtual) {
-        alert("Por favor, gere uma frase primeiro!");
-        return;
-      }
-
-      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pausa para sentir`;
-      let url = "";
-
-      switch(platform) {
-        case 'twitter':
-          url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
-          break;
-        case 'facebook':
-          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareText)}`;
-          break;
-        case 'whatsapp':
-          url = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-          break;
-      }
-
-      window.open(url, '_blank');
-    }
-
-    function copyToClipboard() {
-      if (!fraseAtual) {
-        alert("Por favor, gere uma frase primeiro!");
-        return;
-      }
-
-      const shareText = `"${fraseAtual}" - ${autorAtual}\n\nVia Pausa para sentir`;
+    function renderizarFavoritos() {
+      const container = document.getElementById('favoritos-conteudo');
+      container.innerHTML = '';
       
-      navigator.clipboard.writeText(shareText).then(() => {
-        document.body.style.animation = 'piscar 0.5s';
-        setTimeout(() => { document.body.style.animation = ''; }, 500);
-        
-        const message = document.getElementById("copiedMessage");
-        message.style.display = "block";
-        setTimeout(() => { message.style.display = "none"; }, 2000);
+      if (favoritos.length === 0) {
+        container.innerHTML = '<p>Nenhuma frase favoritada ainda.</p>';
+        return;
+      }
+      
+      favoritos.forEach((frase, index) => {
+        const div = document.createElement('div');
+        div.className = 'favorito-item';
+        div.innerHTML = `
+          <p>"${frase.texto}"</p>
+          <em>- ${frase.autor}</em>
+          <button onclick="removerFavorito(${index})">Remover</button>
+        `;
+        container.appendChild(div);
       });
     }
 
-    // Carrega uma frase aleatória da PoetryDB (opcional)
-    async function carregarFraseExtra() {
-      try {
-        const resposta = await fetch('https://poetrydb.org/random/1');
-        const dados = await resposta.json();
-        if (dados && dados[0]) {
-          const poema = dados[0].lines.join('\n');
-          console.log("Poema sugerido:", poema);
-          // Pode adicionar como uma frase extra se quiser
-        }
-      } catch (e) {
-        console.log("Não foi possível carregar frase extra", e);
-      }
+    function removerFavorito(index) {
+      favoritos.splice(index, 1);
+      localStorage.setItem('favoritos', JSON.stringify(favoritos));
+      renderizarFavoritos();
     }
   </script>
 </body>
