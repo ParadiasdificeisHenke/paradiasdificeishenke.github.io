@@ -1,387 +1,120 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pausa para Sentir</title>
-<style>
-  /* Reset básico */
-  * {
-    box-sizing: border-box;
-  }
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    background-color: #f5f7fa;
-    color: #222;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
-    min-height: 100vh;
-  }
-  main#app {
-    max-width: 640px;
-    width: 100%;
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  }
-  #frase-container {
-    outline: none;
-  }
-  blockquote.frase-texto {
-    font-size: 1.5rem;
-    font-weight: 600;
-    line-height: 1.4;
-    margin: 0 0 1rem;
-  }
-  footer.frase-autor {
-    font-size: 1rem;
-    font-style: italic;
-    text-align: right;
-    color: #555;
-    margin-bottom: 2rem;
-  }
-  .botoes-principais {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-  button {
-    cursor: pointer;
-    background-color: #008CBA;
-    border: none;
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  button:hover, button:focus {
-    background-color: #005f73;
-    outline: none;
-  }
-  button[aria-pressed="true"] {
-    background-color: #f4a261;
-  }
-  .botoes-compartilhar {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  .icon-link {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #eee;
-    color: #333;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-decoration: none;
-  }
-  .icon-link:hover, .icon-link:focus {
-    background-color: #333;
-    color: white;
-    outline: none;
-  }
-  #favoritos-container {
-    background: #eef6f7;
-    border-radius: 12px;
-    padding: 1rem;
-    max-height: 300px;
-    overflow-y: auto;
-    margin-top: 1rem;
-  }
-  #favoritos-container h2 {
-    margin-top: 0;
-  }
-  #lista-favoritos {
-    list-style: none;
-    padding-left: 0;
-  }
-  #lista-favoritos li {
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #ccc;
-  }
-  #lista-favoritos li:last-child {
-    border-bottom: none;
-  }
-  #lista-favoritos li button {
-    margin-left: 1rem;
-    background-color: #e63946;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-  }
-  #btn-fechar-favoritos {
-    margin-top: 1rem;
-    background-color: #6c757d;
-  }
-
-  /* Cores dinâmicas */
-  .tema-1 {
-    background-color: #f0f4f8;
-    color: #023047;
-  }
-  .tema-2 {
-    background-color: #fff3e6;
-    color: #d9480f;
-  }
-  .tema-3 {
-    background-color: #f9f5f3;
-    color: #6a4c93;
-  }
-  .tema-4 {
-    background-color: #e3f6f5;
-    color: #007f5f;
-  }
-  .tema-5 {
-    background-color: #fff0f3;
-    color: #d72631;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pausa para Sentir</title>
 </head>
 <body>
-
-<main id="app" aria-live="polite" class="tema-1" tabindex="-1">
-
-  <section id="frase-container" tabindex="0" aria-label="Frase inspiradora">
-    <blockquote id="frase-texto" class="frase-texto"></blockquote>
-    <footer id="frase-autor" class="frase-autor"></footer>
-  </section>
-
-  <div class="botoes-principais">
-    <button id="btn-nova-frase" aria-label="Nova frase" type="button" title="Nova frase">🔄 Nova frase</button>
-    <button id="btn-favoritar" aria-label="Favoritar frase" aria-pressed="false" type="button" title="Favoritar frase">⭐ Favoritar</button>
-    <button id="btn-lista-favoritos" aria-label="Mostrar lista de frases favoritas" type="button" title="Lista de favoritos">📋 Favoritos</button>
-    <button id="btn-voz" aria-label="Ler frase em voz alta" type="button" title="Ouvir frase">🔊 Ouvir frase</button>
-  </div>
-
-  <div class="botoes-compartilhar" role="region" aria-label="Compartilhar frase">
-    <a id="share-whatsapp" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp" class="icon-link" title="WhatsApp" tabindex="0" role="link">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M20.52 3.48A11.76 11.76 0 0 0 3.48 20.52L2 22l1.5-4.6A11.75 11.75 0 0 0 12 24c6.48 0 12-5.52 12-12 0-3.2-1.25-6.18-3.48-8.52zM12 21c-1.92 0-3.7-.56-5.2-1.52l-.4-.23-2.6.7.7-2.57-.25-.42A9 9 0 0 1 3 12c0-4.97 4.03-9 9-9 4.97 0 9 4.03 9 9s-4.03 9-9 9zm5.55-7.65c-.13-.22-.5-.36-1.05-.63-.55-.27-1.27-.38-1.81-.44-.54-.06-1.02.04-1.44.33l-.27.19a.936.936 0 0 1-1.01-.13c-.1-.1-.24-.37-.5-.77-.26-.4-.5-.38-.78-.38-.28 0-.6 0-1.01 0-.41 0-.95.19-1.45.9-.5.71-.56 1.66-.08 2.6.48.94 1.94 3.7 4.38 5.13 2.44 1.44 3.52 1.07 4.15.97.64-.1 2.03-.83 2.32-1.63.28-.8.28-1.48.2-1.63-.07-.15-.26-.22-.53-.39z"/></svg>
-    </a>
-    <a id="share-twitter" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no Twitter" class="icon-link" title="Twitter" tabindex="0" role="link">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M23.954 4.569a10 10 0 0 1-2.825.775 4.93 4.93 0 0 0 2.163-2.723 9.864 9.864 0 0 1-3.127 1.195 4.916 4.916 0 0 0-8.373 4.482 13.94 13.94 0 0 1-10.11-5.132 4.822 4.822 0 0 0-.666 2.475c0 1.708.87 3.214 2.188 4.099a4.904 4.904 0 0 1-2.228-.616v.06c0 2.385 1.693 4.374 3.946 4.828a4.93 4.93 0 0 1-2.224.084c.626 1.953 2.444 3.376 4.6 3.415a9.867 9.867 0 0 1-6.102 2.105c-.395 0-.786-.023-1.17-.068a13.924 13.924 0 0 0 7.548 2.212c9.057 0 14.01-7.496 14.01-13.986 0-.21 0-.423-.015-.633a9.936 9.936 0 0 0 2.457-2.548l-.047-.02z"/></svg>
-    </a>
-    <a id="share-facebook" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook" class="icon-link" title="Facebook" tabindex="0" role="link">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .732.593 1.324 1.325 1.324h11.494v-9.294h-3.12v-3.622h3.12v-2.672c0-3.1 1.893-4.788 4.657-4.788 1.325 0 2.466.099 2.798.143v3.243l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.312h3.59l-.467 3.622h-3.123V24h6.116c.73 0 1.324-.592 1.324-1.324V1.325c0-.732-.594-1.325-1.325-1.325z"/></svg>
-    </a>
-    <a id="share-instagram" href="#" target="_blank" rel="noopener" aria-label="Abrir Instagram" class="icon-link" title="Instagram" tabindex="0" role="link">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M7.75 2A5.75 5.75 0 0 0 2 7.75v8.5A5.75 5.75 0 0 0 7.75 22h8.5A5.75 5.75 0 0 0 22 16.25v-8.5A5.75 5.75 0 0 0 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5a3.75 3.75 0 0 1-3.75 3.75h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm4.25 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm0 2a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7zm4.75-.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0z"/></svg>
-    </a>
-    <a id="share-threads" href="#" target="_blank" rel="noopener" aria-label="Abrir Threads" class="icon-link" title="Threads" tabindex="0" role="link">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M20 3H4c-1.1 0-2 .9-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V5c0-1.1-.9-2-2-2zM8.09 18.39l-2.47-2.47 1.44-1.44 1.03 1.03 4.46-4.46 1.44 1.44-5.9 5.9zm8.25-7.24h-5.13l1.54-1.54a1.002 1.002 0 0 0 0-1.41l-.68-.68a1.002 1.002 0 0 0-1.41 0L9.66 10.7a1 1 0 0 0 0 1.41l5.91 5.9 3.43-3.43-3.56-3.56z"/></svg>
-    </a>
-  </div>
-
-  <!-- Container para lista de favoritos -->
-  <section id="favoritos-container" aria-live="polite" hidden>
-    <h2>Frases favoritas</h2>
-    <ul id="lista-favoritos" tabindex="0" aria-label="Lista de frases favoritas"></ul>
-    <button id="btn-fechar-favoritos" type="button" aria-label="Fechar lista de favoritos">Fechar</button>
-  </section>
-</main>
+  <main>
+    <blockquote id="frase-texto"></blockquote>
+    <footer id="frase-autor"></footer>
+    <button id="btn-nova-frase">Nova frase</button>
+    <button id="btn-favoritar">Favoritar</button>
+    <button id="btn-voz">Ouvir</button>
+    <button id="btn-lista-favoritos">Ver Favoritos</button>
+    <div>
+      <a id="share-whatsapp" target="_blank">WhatsApp</a>
+      <a id="share-twitter" target="_blank">Twitter</a>
+      <a id="share-facebook" target="_blank">Facebook</a>
+      <a id="share-threads" target="_blank">Threads</a>
+      <a id="share-instagram" target="_blank">Instagram</a>
+    </div>
+    <section id="favoritos-container" hidden>
+      <ul id="lista-favoritos"></ul>
+    </section>
+  </main>
 
 <script>
-  const frases = [
-    { id: 1, texto: "A felicidade se basta", autor: "Desconhecido" },
-    { id: 2, texto: "Você precisa escutar o que você tem a dizer.", autor: "Autor desconhecido" },
-    { id: 3, texto: "A vida não é linear. Aceite.", autor: "Desconhecido" },
-    { id: 4, texto: "O desconforto de dizer não é temporário, mas o alívio de respeitar seus limites é duradouro.", autor: "Desconhecido" },
-    { id: 5, texto: "A saída é para dentro.", autor: "Desconhecido" }
-    // ... suas outras frases aqui
-  ];
+const frases = [
+  { id: "frase1", texto: "A felicidade se basta.", autor: "Rubem Alves" },
+  { id: "frase2", texto: "Você precisa escutar o que você tem a dizer.", autor: "Desconhecido" },
+  { id: "frase3", texto: "Mais do que autoconhecer-se, desconheça-se.", autor: "Tamires Henke" }
+];
 
-  let indiceAtual = 0;
-  let favoritos = new Set(JSON.parse(localStorage.getItem('favoritos') || "[]"));
+const fraseTextoEl = document.getElementById('frase-texto');
+const fraseAutorEl = document.getElementById('frase-autor');
+const btnNovaFrase = document.getElementById('btn-nova-frase');
+const btnFavoritar = document.getElementById('btn-favoritar');
+const btnVoz = document.getElementById('btn-voz');
+const btnListaFavoritos = document.getElementById('btn-lista-favoritos');
+const favoritosContainer = document.getElementById('favoritos-container');
+const listaFavoritos = document.getElementById('lista-favoritos');
 
-  const fraseTextoEl = document.getElementById('frase-texto');
-  const fraseAutorEl = document.getElementById('frase-autor');
-  const btnNovaFrase = document.getElementById('btn-nova-frase');
-  const btnFavoritar = document.getElementById('btn-favoritar');
-  const btnListaFavoritos = document.getElementById('btn-lista-favoritos');
-  const favoritosContainer = document.getElementById('favoritos-container');
-  const listaFavoritos = document.getElementById('lista-favoritos');
-  const btnFecharFavoritos = document.getElementById('btn-fechar-favoritos');
+let indiceAtual = 0;
+let favoritos = new Set(JSON.parse(localStorage.getItem('favoritosPausaParaSentir') || '[]'));
 
-  // Função para formatar autor
-  function formatarAutor(autor) {
-    if (!autor) return "";
-    if (autor.trim().toLowerCase() === "desconhecido" || autor.trim().toLowerCase() === "autor desconhecido") {
-      return "Autor desconhecido";
-    }
-    return autor;
+function mostrarFrase(indice) {
+  const f = frases[indice];
+  fraseTextoEl.textContent = f.texto;
+  fraseAutorEl.textContent = f.autor === 'Desconhecido' ? '— Autor desconhecido' : '— ' + f.autor;
+  indiceAtual = indice;
+  atualizarLinksCompartilhar();
+}
+
+function novaFrase() {
+  let novoIndice;
+  do {
+    novoIndice = Math.floor(Math.random() * frases.length);
+  } while (novoIndice === indiceAtual);
+  mostrarFrase(novoIndice);
+}
+
+function toggleFavorito() {
+  const id = frases[indiceAtual].id;
+  favoritos.has(id) ? favoritos.delete(id) : favoritos.add(id);
+  localStorage.setItem('favoritosPausaParaSentir', JSON.stringify([...favoritos]));
+}
+
+function mostrarFavoritos() {
+  listaFavoritos.innerHTML = '';
+  if (favoritos.size === 0) {
+    listaFavoritos.innerHTML = '<li>Nenhuma frase favoritada ainda.</li>';
+  } else {
+    [...favoritos].forEach(favId => {
+      const f = frases.find(fr => fr.id === favId);
+      if (f) {
+        const li = document.createElement('li');
+        li.textContent = `${f.texto} — ${f.autor === 'Desconhecido' ? 'Autor desconhecido' : f.autor}`;
+        listaFavoritos.appendChild(li);
+      }
+    });
   }
+  favoritosContainer.hidden = false;
+}
 
-  // Mostrar frase na tela
-  function mostrarFrase(indice) {
-    if (indice < 0 || indice >= frases.length) return;
-    const f = frases[indice];
-    fraseTextoEl.textContent = f.texto;
-    fraseAutorEl.textContent = f.autor ? "— " + formatarAutor(f.autor) : "";
-    indiceAtual = indice;
-    atualizarBotaoFavorito(f.id);
-    aplicarCorTema(indice);
-    atualizarLinksCompartilhar();
-    // Foco para acessibilidade
-    fraseTextoEl.parentElement.focus();
-  }
+function falarFrase() {
+  const frase = frases[indiceAtual].texto + ' — ' + frases[indiceAtual].autor;
+  const utter = new SpeechSynthesisUtterance(frase);
+  const vozFem = window.speechSynthesis.getVoices().find(v => v.lang.startsWith('pt') && v.name.toLowerCase().includes('female')) || null;
+  if (vozFem) utter.voice = vozFem;
+  window.speechSynthesis.speak(utter);
+}
 
-  // Atualizar botão favoritar
-  function atualizarBotaoFavorito(idFrase) {
-    btnFavoritar.setAttribute('aria-pressed', favoritos.has(idFrase));
-    btnFavoritar.textContent = favoritos.has(idFrase) ? '⭐ Favorito' : '⭐ Favoritar';
-  }
+function atualizarLinksCompartilhar() {
+  const f = frases[indiceAtual];
+  const texto = `${f.texto} — ${f.autor === 'Desconhecido' ? 'Autor desconhecido' : f.autor}`;
+  const link = encodeURIComponent(`${texto}\n${window.location.href}`);
 
-  // Alternar favorito
-  btnFavoritar.addEventListener('click', () => {
-    const id = frases[indiceAtual].id;
-    if (favoritos.has(id)) {
-      favoritos.delete(id);
-    } else {
-      favoritos.add(id);
-    }
-    salvarFavoritos();
-    atualizarBotaoFavorito(id);
+  document.getElementById('share-whatsapp').href = `https://wa.me/?text=${link}`;
+  document.getElementById('share-twitter').href = `https://twitter.com/intent/tweet?text=${link}`;
+  document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&quote=${link}`;
+  document.getElementById('share-threads').href = `https://www.threads.net/intent/post?text=${link}`;
+  document.getElementById('share-instagram').addEventListener('click', e => {
+    e.preventDefault();
+    navigator.clipboard.writeText(texto).then(() => {
+      alert('Texto copiado! Agora cole no Instagram (Stories ou Direct).');
+      window.open('https://www.instagram.com/', '_blank');
+    });
   });
+}
 
-  // Salvar favoritos no localStorage
-  function salvarFavoritos() {
-    localStorage.setItem('favoritos', JSON.stringify(Array.from(favoritos)));
-  }
+btnNovaFrase.onclick = novaFrase;
+btnFavoritar.onclick = toggleFavorito;
+btnVoz.onclick = falarFrase;
+btnListaFavoritos.onclick = mostrarFavoritos;
 
-  // Botão nova frase
-  btnNovaFrase.addEventListener('click', () => {
-    let novoIndice;
-    do {
-      novoIndice = Math.floor(Math.random() * frases.length);
-    } while (novoIndice === indiceAtual && frases.length > 1);
-    mostrarFrase(novoIndice);
-  });
-
-  // Atualizar cor tema baseado no índice
-  function aplicarCorTema(indice) {
-    const app = document.getElementById('app');
-    app.className = '';
-    const temaClass = 'tema-' + ((indice % 5) + 1);
-    app.classList.add(temaClass);
-  }
-
-  // URLs para cada frase - pode ser uma âncora do site (modifique conforme necessário)
-  function urlFrase() {
-    // Exemplo de URL que referencia a frase pelo id no hash
-    return `${window.location.origin}${window.location.pathname}#frase-${frases[indiceAtual].id}`;
-  }
-
-  // Atualizar links de compartilhar
-  function atualizarLinksCompartilhar() {
-    const f = frases[indiceAtual];
-    const textoCompartilhar = `"${f.texto}" — ${formatarAutor(f.autor)}\n\n${urlFrase()}`;
-
-    // WhatsApp
-    document.getElementById('share-whatsapp').href =
-      `https://wa.me/?text=${encodeURIComponent(textoCompartilhar)}`;
-
-    // Twitter
-    document.getElementById('share-twitter').href =
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(textoCompartilhar)}`;
-
-    // Facebook - só aceita URL, então só passa link da frase
-    document.getElementById('share-facebook').href =
-      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlFrase())}`;
-
-    // Instagram e Threads não têm share oficial de texto, então linka para os perfis oficiais
-    document.getElementById('share-instagram').href =
-      `https://www.instagram.com/`;
-
-    document.getElementById('share-threads').href =
-      `https://www.instagram.com/threads/`;
-  }
-
-  // Mostrar lista de favoritos no container
-  function mostrarFavoritos() {
-    listaFavoritos.innerHTML = '';
-    if (favoritos.size === 0) {
-      listaFavoritos.innerHTML = '<li>Nenhuma frase favoritada ainda.</li>';
-    } else {
-      const idsFavoritos = Array.from(favoritos);
-      idsFavoritos.forEach(id => {
-        const frase = frases.find(f => f.id === id);
-        if (frase) {
-          const li = document.createElement('li');
-          li.textContent = `"${frase.texto}" — ${formatarAutor(frase.autor)}`;
-          // Botão para remover dos favoritos
-          const btnRemover = document.createElement('button');
-          btnRemover.textContent = 'Remover';
-          btnRemover.type = 'button';
-          btnRemover.setAttribute('aria-label', `Remover frase favorita: ${frase.texto}`);
-          btnRemover.addEventListener('click', () => {
-            favoritos.delete(id);
-            salvarFavoritos();
-            atualizarBotaoFavorito(frases[indiceAtual].id);
-            mostrarFavoritos();
-          });
-          li.appendChild(btnRemover);
-          listaFavoritos.appendChild(li);
-        }
-      });
-    }
-    favoritosContainer.hidden = false;
-    favoritosContainer.focus();
-  }
-
-  // Fechar lista de favoritos
-  btnFecharFavoritos.addEventListener('click', () => {
-    favoritosContainer.hidden = true;
-    btnListaFavoritos.focus();
-  });
-
-  // Botão para abrir favoritos
-  btnListaFavoritos.addEventListener('click', () => {
-    mostrarFavoritos();
-  });
-
-  // Leitura em voz alta
-  const btnVoz = document.getElementById('btn-voz');
-  btnVoz.addEventListener('click', () => {
-    const frase = frases[indiceAtual];
-    if (!('speechSynthesis' in window)) {
-      alert('Seu navegador não suporta síntese de voz.');
-      return;
-    }
-    speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(`${frase.texto}. Autor: ${formatarAutor(frase.autor)}.`);
-    // Selecionar voz feminina preferencialmente (PT-BR)
-    const vozes = speechSynthesis.getVoices();
-    const vozPt = vozes.find(v => v.lang.startsWith('pt') && v.name.toLowerCase().includes('female')) || vozes.find(v => v.lang.startsWith('pt'));
-    if (vozPt) utterance.voice = vozPt;
-    speechSynthesis.speak(utterance);
-  });
-
-  // Inicialização
-  mostrarFrase(indiceAtual);
-
-  // Se quiser, pode pegar o índice do hash na URL para mostrar frase específica
-  window.addEventListener('hashchange', () => {
-    const hash = window.location.hash;
-    if (hash.startsWith('#frase-')) {
-      const id = parseInt(hash.replace('#frase-', ''), 10);
-      const idx = frases.findIndex(f => f.id === id);
-      if (idx >= 0) mostrarFrase(idx);
-    }
-  });
-
+window.onload = () => mostrarFrase(0);
 </script>
-
 </body>
 </html>
