@@ -4,30 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pausa para sentir</title>
-  <!-- Fontes modernas -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  
-  <!-- Ícones Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
   <style>
-    :root {
-      --roxo-escuro: #4c1d95;
-      --roxo-claro: #8b5cf6;
-      --roxo-suave: #c4b5fd;
-      --bg-escuro: #1e1b4b;
-      --bg-claro: #f5f3ff;
-      --texto-escuro: #e9e7ff;
-      --texto-claro: #1e1b4b;
-      --sombra: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      --transicao: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     /* [ESTILOS BASE] */
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Georgia', serif;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -36,86 +16,67 @@
       margin: 0;
       padding: 20px;
       text-align: center;
-      transition: var(--transicao);
-      background-color: var(--bg-escuro);
-      color: var(--texto-escuro);
-      font-size: 16px;
-      line-height: 1.6;
+      transition: background 0.5s, color 0.5s;
+      background-color: #1a1a2e;
+      color: #f0f0f0;
+      font-size: 16px; /* Tamanho base para controle de zoom */
     }
 
     /* [MODO DIURNO] */
     body.modo-diurno {
-      background-color: var(--bg-claro);
-      color: var(--texto-claro);
+      background-color: #f8f9fa;
+      color: #333;
     }
 
     h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      margin-bottom: 2rem;
-      color: var(--roxo-claro);
-      font-weight: 700;
-      letter-spacing: -0.5px;
+      font-size: 2.4em;
+      margin-bottom: 30px;
+      color: #a78bfa;
     }
     body.modo-diurno h1 {
-      color: var(--roxo-escuro);
+      color: #6d28d9;
     }
 
     #frase {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      margin: 2rem 0;
-      max-width: 800px;
-      line-height: 1.8;
-      min-height: 180px;
-      transition: opacity 0.5s ease;
-      font-weight: 400;
-      font-style: italic;
+      font-size: 1.5em;
+      margin: 20px 0;
+      max-width: 600px;
+      line-height: 1.6;
+      min-height: 120px;
+      transition: opacity 0.5s;
     }
 
     #autor {
-      font-family: 'Inter', sans-serif;
-      font-style: normal;
-      margin-top: 1.5rem;
-      font-size: 1.2rem;
-      color: var(--roxo-suave);
-      font-weight: 500;
+      font-style: italic;
+      margin-top: 10px;
+      font-size: 1.1em;
+      color: #a78bfa;
     }
     body.modo-diurno #autor {
-      color: var(--roxo-escuro);
+      color: #6d28d9;
     }
 
     .botoes {
       display: flex;
-      gap: 1rem;
-      margin-top: 3rem;
+      gap: 10px;
+      margin-top: 30px;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     button {
-      background-color: var(--roxo-escuro);
-      color: white;
+      background-color: #4a4a6a;
+      color: #f0f0f0;
       border: none;
-      padding: 0.8rem 1.8rem;
-      font-size: 1rem;
-      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 30px;
       cursor: pointer;
-      transition: var(--transicao);
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: var(--sombra);
+      transition: all 0.3s;
     }
     body.modo-diurno button {
-      background-color: var(--roxo-claro);
-      color: white;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      background-color: #e0e0e0;
+      color: #333;
     }
 
     /* [FAVORITOS] */
@@ -123,18 +84,18 @@
       position: fixed;
       top: 0;
       right: -100%;
-      width: 400px;
+      width: 300px;
       height: 100vh;
-      background-color: var(--bg-escuro);
-      box-shadow: -5px 0 25px rgba(0,0,0,0.2);
-      padding: 2rem;
+      background-color: #16213e;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+      padding: 30px 20px;
       overflow-y: auto;
-      transition: right 0.4s ease-out;
+      transition: right 0.4s;
       z-index: 1000;
     }
     body.modo-diurno #favoritos-lista {
-      background-color: white;
-      border-left: 1px solid #e5e7eb;
+      background-color: #ffffff;
+      border-left: 1px solid #ddd;
     }
 
     #favoritos-lista.aberto {
@@ -144,12 +105,12 @@
     /* [COMPARTILHAMENTO] */
     #share-options {
       display: none;
-      margin-top: 2rem;
+      margin-top: 20px;
       animation: fadeIn 0.3s;
     }
     #share-options.aberto {
       display: flex;
-      gap: 1rem;
+      gap: 15px;
       justify-content: center;
     }
 
@@ -157,130 +118,31 @@
       background: none;
       border: none;
       cursor: pointer;
-      font-size: 2rem;
-      transition: var(--transicao);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 1.8em;
+      transition: transform 0.3s;
     }
     .share-btn:hover {
-      transform: scale(1.15);
+      transform: scale(1.2);
     }
-
-    /* Ícones específicos das redes sociais */
-    .fa-whatsapp { color: #25D366; }
-    .fa-instagram { 
-      background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .fa-facebook { color: #1877F2; }
-    .fa-twitter { color: #1DA1F2; }
-    .fa-threads { color: #000000; }
-    body.modo-diurno .fa-threads { color: #000000; }
 
     /* [CONTROLES DE ACESSIBILIDADE] */
     .acessibilidade {
       position: fixed;
-      bottom: 2rem;
-      left: 2rem;
+      bottom: 20px;
+      left: 20px;
       display: flex;
-      gap: 0.8rem;
+      gap: 10px;
       z-index: 1000;
-      background: rgba(30, 27, 75, 0.9);
-      padding: 0.8rem;
-      border-radius: 50px;
-      box-shadow: var(--sombra);
-      backdrop-filter: blur(10px);
-    }
-    body.modo-diurno .acessibilidade {
-      background: rgba(245, 243, 255, 0.9);
     }
 
     .acessibilidade button {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0;
-      background-color: var(--roxo-claro);
-      color: white;
-      font-size: 1.2rem;
-    }
-    body.modo-diurno .acessibilidade button {
-      background-color: var(--roxo-escuro);
-    }
-
-    /* [ITENS FAVORITOS] */
-    .favorito-item {
-      padding: 1.5rem 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 1.5rem;
-    }
-    body.modo-diurno .favorito-item {
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .favorito-item p {
-      margin: 0.5rem 0;
-      text-align: left;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.2rem;
-    }
-
-    .favorito-item em {
-      font-family: 'Inter', sans-serif;
-      font-style: normal;
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-    }
-
-    .favorito-item button {
-      background-color: transparent;
-      border: 1px solid var(--roxo-claro);
-      color: var(--roxo-claro);
-      padding: 0.5rem 1rem;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-    body.modo-diurno .favorito-item button {
-      border-color: var(--roxo-escuro);
-      color: var(--roxo-escuro);
-    }
-
-    /* [OPÇÕES EXPORTAÇÃO] */
-    .export-options {
-      margin-top: 2rem;
-      display: none;
-      gap: 1rem;
-      justify-content: center;
-    }
-    .export-options.aberto {
-      display: flex;
-    }
-
-    /* [BOTÃO FECHAR] */
-    .fechar-lista {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: none;
-      border: none;
-      font-size: 1.8rem;
-      cursor: pointer;
-      color: var(--roxo-suave);
-      padding: 0.5rem;
-    }
-    body.modo-diurno .fechar-lista {
-      color: var(--roxo-escuro);
     }
 
     /* [ANIMAÇÕES] */
@@ -289,60 +151,51 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
-
     /* [RESPONSIVO] */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      
-      #frase {
-        font-size: 1.4rem;
-        min-height: 150px;
-      }
-      
+    @media (max-width: 600px) {
       #favoritos-lista {
-        width: 90%;
+        width: 85%;
       }
-      
-      .botoes {
-        gap: 0.8rem;
+      #share-options.aberto {
+        flex-wrap: wrap;
       }
-      
-      button {
-        padding: 0.7rem 1.5rem;
-        font-size: 0.9rem;
-      }
-      
       .acessibilidade {
-        bottom: 1rem;
-        left: 1rem;
+        bottom: 10px;
+        left: 10px;
       }
     }
 
-    @media (max-width: 480px) {
-      h1 {
-        font-size: 1.8rem;
-      }
-      
-      #frase {
-        font-size: 1.2rem;
-      }
-      
-      .botoes {
-        flex-direction: column;
-        width: 100%;
-      }
-      
-      button {
-        width: 100%;
-        justify-content: center;
-      }
+    /* [ITENS FAVORITOS] */
+    .favorito-item {
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 15px;
+    }
+    body.modo-diurno .favorito-item {
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .favorito-item p {
+      margin: 5px 0;
+      text-align: left;
+    }
+
+    .favorito-item button {
+      padding: 8px 15px;
+      margin-top: 10px;
+      font-size: 0.9em;
+    }
+
+    /* [OPÇÕES EXPORTAÇÃO] */
+    .export-options {
+      margin-top: 20px;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+    .export-options.aberto {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
     }
   </style>
 </head>
@@ -353,76 +206,41 @@
   <div id="autor"></div>
   
   <div class="botoes">
-    <button onclick="novaFrase()">
-      <i class="fas fa-sync-alt"></i> Nova frase
-    </button>
-    <button onclick="salvarFavorito()">
-      <i class="fas fa-star"></i> Favoritar
-    </button>
-    <button onclick="toggleFavoritos()">
-      <i class="fas fa-bookmark"></i> Favoritos (<span id="contador-favoritos">0</span>)
-    </button>
-    <button onclick="toggleShare()">
-      <i class="fas fa-share-alt"></i> Compartilhar
-    </button>
-    <button onclick="alternarModo()">
-      <i class="fas fa-moon"></i> Modo Noturno
-    </button>
+    <button onclick="novaFrase()">Nova frase</button>
+    <button onclick="salvarFavorito()">⭐ Favoritar</button>
+    <button onclick="toggleFavoritos()">📖 Favoritos (<span id="contador-favoritos">0</span>)</button>
+    <button onclick="toggleShare()">↗️ Compartilhar</button>
+    <button onclick="alternarModo()">🌙 Modo Noturno</button>
   </div>
 
   <!-- Opções de Compartilhamento -->
   <div id="share-options">
-    <button class="share-btn" onclick="compartilhar('whatsapp')">
-      <i class="fab fa-whatsapp"></i>
-    </button>
-    <button class="share-btn" onclick="compartilhar('instagram')">
-      <i class="fab fa-instagram"></i>
-    </button>
-    <button class="share-btn" onclick="compartilhar('facebook')">
-      <i class="fab fa-facebook"></i>
-    </button>
-    <button class="share-btn" onclick="compartilhar('threads')">
-      <i class="fab fa-threads"></i>
-    </button>
-    <button class="share-btn" onclick="compartilhar('twitter')">
-      <i class="fab fa-twitter"></i>
-    </button>
+    <button class="share-btn" onclick="compartilhar('whatsapp')">📱</button>
+    <button class="share-btn" onclick="compartilhar('instagram')">📷</button>
+    <button class="share-btn" onclick="compartilhar('facebook')">📘</button>
+    <button class="share-btn" onclick="compartilhar('threads')">🧵</button>
+    <button class="share-btn" onclick="compartilhar('twitter')">🐦</button>
   </div>
 
   <!-- Sidebar de Favoritos -->
   <div id="favoritos-lista">
     <button class="fechar-lista" onclick="toggleFavoritos()">×</button>
-    <h2><i class="fas fa-bookmark"></i> Seus Favoritos</h2>
+    <h2>Seus Favoritos</h2>
     <div id="favoritos-conteudo"></div>
     
     <!-- Opções de Exportação -->
     <div class="export-options">
-      <button onclick="exportarFavoritos('json')">
-        <i class="fas fa-file-code"></i> JSON
-      </button>
-      <button onclick="exportarFavoritos('txt')">
-        <i class="fas fa-file-alt"></i> TXT
-      </button>
-      <button onclick="exportarFavoritos('pdf')">
-        <i class="fas fa-file-pdf"></i> PDF
-      </button>
+      <button onclick="exportarFavoritos('json')">Exportar JSON</button>
+      <button onclick="exportarFavoritos('txt')">Exportar TXT</button>
     </div>
   </div>
 
   <!-- Controles de Acessibilidade -->
   <div class="acessibilidade">
-    <button title="Aumentar fonte (Ctrl + +)" onclick="ajustarFonte(1)">
-      <i class="fas fa-text-height"></i>
-    </button>
-    <button title="Diminuir fonte (Ctrl + -)" onclick="ajustarFonte(-1)">
-      <i class="fas fa-text-width"></i>
-    </button>
-    <button title="Ler em voz alta (Ctrl + L)" onclick="lerTexto()">
-      <i class="fas fa-volume-up"></i>
-    </button>
-    <button title="Parar leitura" onclick="pararLeitura()">
-      <i class="fas fa-stop"></i>
-    </button>
+    <button title="Aumentar fonte (Ctrl + +)" onclick="ajustarFonte(1)">A+</button>
+    <button title="Diminuir fonte (Ctrl + -)" onclick="ajustarFonte(-1)">A-</button>
+    <button title="Ler em voz alta (Ctrl + L)" onclick="lerTexto()">🔊</button>
+    <button title="Parar leitura" onclick="pararLeitura()">⏹️</button>
   </div>
 
   <script>
@@ -435,18 +253,6 @@
       {
         texto: "Viver relações saudáveis não significa viver relações sem conflitos.",
         autor: "Ana Nunes"
-      },
-      {
-        texto: "O essencial é invisível aos olhos, só se vê bem com o coração.",
-        autor: "Antoine de Saint-Exupéry"
-      },
-      {
-        texto: "Nada é permanente, exceto a mudança.",
-        autor: "Heráclito"
-      },
-      {
-        texto: "A vida é o que acontece enquanto você está ocupado fazendo outros planos.",
-        autor: "John Lennon"
       }
     ];
 
@@ -456,7 +262,7 @@
       autorAtual: null,
       favoritos: JSON.parse(localStorage.getItem('favoritos')) || [],
       modoNoturno: true,
-      tamanhoFonte: 16,
+      tamanhoFonte: 16, // Tamanho base em px
       synth: window.speechSynthesis,
       utterance: null
     };
@@ -468,7 +274,7 @@
       novaFrase();
       atualizarContadorFavoritos();
       
-      // Restaurar tamanho da fonte
+      // Restaurar tamanho da fonte se existir no localStorage
       const tamanhoSalvo = localStorage.getItem('tamanhoFonte');
       if (tamanhoSalvo) {
         estado.tamanhoFonte = parseInt(tamanhoSalvo);
@@ -512,7 +318,7 @@
         // Fechar compartilhamento ao mudar frase
         document.getElementById("share-options").classList.remove("aberto");
         
-        // Parar leitura anterior
+        // Parar leitura anterior se estiver ocorrendo
         if (estado.synth.speaking) {
           estado.synth.cancel();
         }
@@ -534,6 +340,7 @@
           url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
           break;
         case 'instagram':
+          // Instagram não permite compartilhamento direto, usa área de transferência
           navigator.clipboard.writeText(texto)
             .then(() => alert("Texto copiado! Cole no Instagram"))
             .catch(() => alert("Não foi possível copiar"));
@@ -557,8 +364,7 @@
       
       const novaFavorita = {
         texto: estado.fraseAtual,
-        autor: estado.autorAtual,
-        data: new Date().toLocaleDateString()
+        autor: estado.autorAtual
       };
       
       if (!estado.favoritos.some(f => f.texto === estado.fraseAtual)) {
@@ -566,13 +372,7 @@
         localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
         atualizarContadorFavoritos();
         renderizarFavoritos();
-        
-        // Feedback visual
-        const btn = document.querySelector('button[onclick="salvarFavorito()"]');
-        btn.innerHTML = '<i class="fas fa-check"></i> Favoritado!';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fas fa-star"></i> Favoritar';
-        }, 2000);
+        alert("Frase favoritada!");
       } else {
         alert("Esta frase já está nos favoritos!");
       }
@@ -584,6 +384,7 @@
       
       if (favoritosLista.classList.contains('aberto')) {
         renderizarFavoritos();
+        // Mostrar opções de exportação quando abrir favoritos
         document.querySelector('.export-options').classList.add('aberto');
       }
     }
@@ -591,101 +392,76 @@
     function renderizarFavoritos() {
       const container = document.getElementById('favoritos-conteudo');
       container.innerHTML = estado.favoritos.length === 0 
-        ? '<p style="text-align: center; margin-top: 2rem;">Nenhuma frase favoritada ainda.</p>'
+        ? '<p>Nenhuma frase favoritada ainda.</p>'
         : estado.favoritos.map((frase, index) => `
             <div class="favorito-item">
               <p>"${frase.texto}"</p>
-              <em>- ${frase.autor}</em>
-              ${frase.data ? `<small style="display: block; margin-top: 0.5rem; color: var(--roxo-suave);">Salvo em: ${frase.data}</small>` : ''}
-              <button onclick="removerFavorito(${index})">
-                <i class="fas fa-trash-alt"></i> Remover
-              </button>
+              <p><em>- ${frase.autor}</em></p>
+              <button onclick="removerFavorito(${index})">Remover</button>
             </div>
           `).join('');
     }
 
     function removerFavorito(index) {
-      if (confirm("Tem certeza que deseja remover este favorito?")) {
-        estado.favoritos.splice(index, 1);
-        localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
-        atualizarContadorFavoritos();
-        renderizarFavoritos();
-      }
+      estado.favoritos.splice(index, 1);
+      localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
+      atualizarContadorFavoritos();
+      renderizarFavoritos();
     }
 
     function alternarModo() {
       estado.modoNoturno = !estado.modoNoturno;
       document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
       atualizarTextoModo();
-      
-      // Atualizar ícone do botão
-      const btn = document.querySelector('button[onclick="alternarModo()"]');
-      if (estado.modoNoturno) {
-        btn.innerHTML = '<i class="fas fa-sun"></i> Modo Diurno';
-      } else {
-        btn.innerHTML = '<i class="fas fa-moon"></i> Modo Noturno';
-      }
     }
 
-    // [ACESSIBILIDADE]
+    // [FUNÇÕES DE ACESSIBILIDADE]
     function ajustarFonte(direcao) {
+      // Limites mínimo e máximo para o tamanho da fonte
       const minSize = 12;
       const maxSize = 24;
       
+      // Ajustar tamanho
       estado.tamanhoFonte += (direcao * 2);
       
+      // Garantir que está dentro dos limites
       if (estado.tamanhoFonte < minSize) estado.tamanhoFonte = minSize;
       if (estado.tamanhoFonte > maxSize) estado.tamanhoFonte = maxSize;
       
+      // Aplicar o novo tamanho
       document.body.style.fontSize = estado.tamanhoFonte + 'px';
+      
+      // Salvar preferência
       localStorage.setItem('tamanhoFonte', estado.tamanhoFonte);
     }
 
     function lerTexto() {
+      // Parar leitura anterior se estiver ocorrendo
       if (estado.synth.speaking) {
         estado.synth.cancel();
       }
       
       if (!estado.fraseAtual) return;
       
+      // Criar o texto para leitura (frase + autor)
       const textoParaLer = `${estado.fraseAtual}. Por ${estado.autorAtual}.`;
       
+      // Configurar a fala
       estado.utterance = new SpeechSynthesisUtterance(textoParaLer);
       estado.utterance.lang = 'pt-BR';
-      estado.utterance.rate = 0.9;
-      estado.utterance.pitch = 1;
-      estado.utterance.volume = 1;
+      estado.utterance.rate = 0.9; // Velocidade um pouco mais lenta
       
-      // Configurar voz feminina se disponível
-      const voices = estado.synth.getVoices();
-      const femaleVoice = voices.find(v => v.lang === 'pt-BR' && v.name.includes('Female'));
-      if (femaleVoice) {
-        estado.utterance.voice = femaleVoice;
-      }
-      
+      // Iniciar a leitura
       estado.synth.speak(estado.utterance);
-      
-      // Feedback visual
-      const btn = document.querySelector('.acessibilidade button[onclick="lerTexto()"]');
-      btn.innerHTML = '<i class="fas fa-volume-up" style="animation: pulse 1.5s infinite;"></i>';
-      btn.style.animation = 'pulse 1.5s infinite';
-      
-      estado.utterance.onend = function() {
-        btn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        btn.style.animation = 'none';
-      };
     }
 
     function pararLeitura() {
       if (estado.synth.speaking) {
         estado.synth.cancel();
-        const btn = document.querySelector('.acessibilidade button[onclick="lerTexto()"]');
-        btn.innerHTML = '<i class="fas fa-volume-up"></i>';
-        btn.style.animation = 'none';
       }
     }
 
-    // [EXPORTAÇÃO]
+    // [EXPORTAÇÃO DE FAVORITOS]
     function exportarFavoritos(formato) {
       if (estado.favoritos.length === 0) {
         alert("Nenhum favorito para exportar!");
@@ -698,16 +474,13 @@
         conteudo = JSON.stringify(estado.favoritos, null, 2);
         tipoMime = 'application/json';
         extensao = 'json';
-      } else if (formato === 'txt') {
-        conteudo = estado.favoritos.map(f => `"${f.texto}"\n- ${f.autor}\n${f.data ? `Salvo em: ${f.data}\n` : ''}\n`).join('\n');
+      } else { // TXT
+        conteudo = estado.favoritos.map(f => `"${f.texto}"\n- ${f.autor}\n`).join('\n');
         tipoMime = 'text/plain';
         extensao = 'txt';
-      } else { // PDF (simulado)
-        alert("Para exportar como PDF, imprima a página e salve como PDF");
-        window.print();
-        return;
       }
       
+      // Criar blob e link para download
       const blob = new Blob([conteudo], { type: tipoMime });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -719,25 +492,14 @@
       URL.revokeObjectURL(url);
     }
 
-    // [UTILITÁRIOS]
+    // [FUNÇÕES AUXILIARES]
     function atualizarTextoModo() {
-      const btn = document.querySelector('button[onclick="alternarModo()"]');
-      if (estado.modoNoturno) {
-        btn.innerHTML = '<i class="fas fa-sun"></i> Modo Diurno';
-      } else {
-        btn.innerHTML = '<i class="fas fa-moon"></i> Modo Noturno';
-      }
+      document.querySelector('button[onclick="alternarModo()"]').textContent = 
+        estado.modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
     }
 
     function atualizarContadorFavoritos() {
       document.getElementById('contador-favoritos').textContent = estado.favoritos.length;
-    }
-
-    // Carregar vozes TTS quando disponíveis
-    if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = function() {
-        // Vozes carregadas
-      };
     }
   </script>
 </body>
