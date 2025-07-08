@@ -1,767 +1,495 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pausa para sentir</title>
-  <style>
-    /* [ESTILOS BASE] */
-    body {
-      font-family: 'Georgia', serif;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      transition: background 0.5s, color 0.5s;
-      background-color: #1a1a2e;
-      color: #f0f0f0;
-      font-size: 16px; /* Tamanho base para controle de zoom */
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pausa para Sentir</title>
+<style>
+  /* Reset básico */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f5f7fa;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+  }
+  main#app {
+    max-width: 640px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  }
+  #frase-container {
+    outline: none;
+  }
+  blockquote.frase-texto {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0 0 1rem;
+  }
+  footer.frase-autor {
+    font-size: 1rem;
+    font-style: italic;
+    text-align: right;
+    color: #555;
+    margin-bottom: 2rem;
+  }
+  .botoes-principais {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  button {
+    cursor: pointer;
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  button:hover, button:focus {
+    background-color: #005f73;
+    outline: none;
+  }
+  button[aria-pressed="true"] {
+    background-color: #f4a261;
+  }
+  .botoes-compartilhar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .icon-link {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eee;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+  }
+  .icon-link:hover, .icon-link:focus {
+    background-color: #333;
+    color: white;
+    outline: none;
+  }
+  #favoritos-container {
+    background: #eef6f7;
+    border-radius: 12px;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 1rem;
+  }
+  #favoritos-container h2 {
+    margin-top: 0;
+  }
+  #lista-favoritos {
+    list-style: none;
+    padding-left: 0;
+  }
+  #lista-favoritos li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #ccc;
+  }
+  #lista-favoritos li:last-child {
+    border-bottom: none;
+  }
+  #lista-favoritos li button {
+    margin-left: 1rem;
+    background-color: #e63946;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+  }
+  #btn-fechar-favoritos {
+    margin-top: 1rem;
+    background-color: #6c757d;
+  }
 
-    /* [MODO DIURNO] */
-    body.modo-diurno {
-      background-color: #f8f9fa;
-      color: #333;
-    }
-
-    h1 {
-      font-size: 2.4em;
-      margin-bottom: 30px;
-      color: #a78bfa;
-    }
-    body.modo-diurno h1 {
-      color: #6d28d9;
-    }
-
-    #frase {
-      font-size: 1.5em;
-      margin: 20px 0;
-      max-width: 600px;
-      line-height: 1.6;
-      min-height: 120px;
-      transition: opacity 0.5s;
-    }
-
-    #autor {
-      font-style: italic;
-      margin-top: 10px;
-      font-size: 1.1em;
-      color: #a78bfa;
-    }
-    body.modo-diurno #autor {
-      color: #6d28d9;
-    }
-
-    .botoes {
-      display: flex;
-      gap: 10px;
-      margin-top: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    button {
-      background-color: #4a4a6a;
-      color: #f0f0f0;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1em;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    body.modo-diurno button {
-      background-color: #e0e0e0;
-      color: #333;
-    }
-
-    /* [FAVORITOS] */
-    #favoritos-lista {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 300px;
-      height: 100vh;
-      background-color: #16213e;
-      box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-      padding: 30px 20px;
-      overflow-y: auto;
-      transition: right 0.4s;
-      z-index: 1000;
-    }
-    body.modo-diurno #favoritos-lista {
-      background-color: #ffffff;
-      border-left: 1px solid #ddd;
-    }
-
-    #favoritos-lista.aberto {
-      right: 0;
-    }
-
-    /* [COMPARTILHAMENTO] */
-    #share-options {
-      display: none;
-      margin-top: 20px;
-      animation: fadeIn 0.3s;
-    }
-    #share-options.aberto {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-    }
-
-    .share-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1.8em;
-      transition: transform 0.3s;
-      padding: 5px;
-    }
-    .share-btn:hover {
-      transform: scale(1.2);
-    }
-
-    /* [CONTROLES DE ACESSIBILIDADE] */
-    .acessibilidade {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      display: flex;
-      gap: 10px;
-      z-index: 1000;
-    }
-
-    .acessibilidade button {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-    }
-
-    /* [ANIMAÇÕES] */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* [RESPONSIVO] */
-    @media (max-width: 600px) {
-      #favoritos-lista {
-        width: 85%;
-      }
-      #share-options.aberto {
-        flex-wrap: wrap;
-      }
-      .acessibilidade {
-        bottom: 10px;
-        left: 10px;
-      }
-    }
-
-    /* [ITENS FAVORITOS] */
-    .favorito-item {
-      padding: 15px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      margin-bottom: 15px;
-    }
-    body.modo-diurno .favorito-item {
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-
-    .favorito-item p {
-      margin: 5px 0;
-      text-align: left;
-    }
-
-    .favorito-item button {
-      padding: 8px 15px;
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
-
-    /* [OPÇÕES EXPORTAÇÃO] */
-    .export-options {
-      margin-top: 20px;
-      display: none;
-      animation: fadeIn 0.3s;
-    }
-    .export-options.aberto {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-  </style>
+  /* Cores dinâmicas */
+  .tema-1 {
+    background-color: #f0f4f8;
+    color: #023047;
+  }
+  .tema-2 {
+    background-color: #fff3e6;
+    color: #d9480f;
+  }
+  .tema-3 {
+    background-color: #f9f5f3;
+    color: #6a4c93;
+  }
+  .tema-4 {
+    background-color: #e3f6f5;
+    color: #007f5f;
+  }
+  .tema-5 {
+    background-color: #fff0f3;
+    color: #d72631;
+  }
+</style>
 </head>
 <body>
-  <h1>Pausa para sentir</h1>
-  
-  <div id="frase">Clique em "Nova frase" para começar</div>
-  <div id="autor"></div>
-  
-  <div class="botoes">
-    <button onclick="novaFrase()">Nova frase</button>
-    <button onclick="salvarFavorito()">⭐ Favoritar</button>
-    <button onclick="toggleFavoritos()">📖 Favoritos (<span id="contador-favoritos">0</span>)</button>
-    <button onclick="toggleShare()">↗️ Compartilhar</button>
-    <button onclick="alternarModo()">🌙 Modo Noturno</button>
+
+<main id="app" aria-live="polite" class="tema-1" tabindex="-1">
+
+  <section id="frase-container" tabindex="0" aria-label="Frase inspiradora">
+    <blockquote id="frase-texto" class="frase-texto"></blockquote>
+    <footer id="frase-autor" class="frase-autor"></footer>
+  </section>
+
+  <div class="botoes-principais">
+    <button id="btn-nova-frase" aria-label="Nova frase" type="button" title="Nova frase">🔄 Nova frase</button>
+    <button id="btn-favoritar" aria-label="Favoritar frase" aria-pressed="false" type="button" title="Favoritar frase">⭐ Favoritar</button>
+    <button id="btn-voz" aria-label="Ler frase em voz alta" type="button" title="Ouvir frase">🔊 Ouvir frase</button>
   </div>
 
-  <!-- Opções de Compartilhamento -->
-  <div id="share-options">
-    <button class="share-btn" onclick="compartilhar('whatsapp')" title="Compartilhar no WhatsApp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="compartilhar('facebook')" title="Compartilhar no Facebook"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="compartilhar('twitter')" title="Compartilhar no Twitter"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="compartilhar('linkedin')" title="Compartilhar no LinkedIn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="copiarLink()" title="Copiar link"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Copy_icon_%281992%29.png" alt="Copiar" style="width:32px;height:32px;"></button>
+  <div class="botoes-compartilhar" role="region" aria-label="Compartilhar frase">
+    <a id="share-whatsapp" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no WhatsApp" class="icon-link" title="WhatsApp" tabindex="0" aria-role="link" role="link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M20.52 3.48A11.76 11.76 0 0 0 3.48 20.52L2 22l1.5-4.6A11.75 11.75 0 0 0 12 24c6.48 0 12-5.52 12-12 0-3.2-1.25-6.18-3.48-8.52zM12 21c-1.92 0-3.7-.56-5.2-1.52l-.4-.23-2.6.7.7-2.57-.25-.42A9 9 0 0 1 3 12c0-4.97 4.03-9 9-9 4.97 0 9 4.03 9 9s-4.03 9-9 9zm5.55-7.65c-.13-.22-.5-.36-1.05-.63-.55-.27-1.27-.38-1.81-.44-.54-.06-1.02.04-1.44.33l-.27.19a.936.936 0 0 1-1.01-.13c-.1-.1-.24-.37-.5-.77-.26-.4-.5-.38-.78-.38-.28 0-.6 0-1.01 0-.41 0-.95.19-1.45.9-.5.71-.56 1.66-.08 2.6.48.94 1.94 3.7 4.38 5.13 2.44 1.44 3.52 1.07 4.15.97.64-.1 2.03-.83 2.32-1.63.28-.8.28-1.48.2-1.63-.07-.15-.26-.22-.53-.39z"/></svg>
+    </a>
+    <a id="share-twitter" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no Twitter" class="icon-link" title="Twitter" tabindex="0" role="link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M23.954 4.569a10 10 0 0 1-2.825.775 4.93 4.93 0 0 0 2.163-2.723 9.864 9.864 0 0 1-3.127 1.195 4.916 4.916 0 0 0-8.373 4.482 13.94 13.94 0 0 1-10.11-5.132 4.822 4.822 0 0 0-.666 2.475c0 1.708.87 3.214 2.188 4.099a4.904 4.904 0 0 1-2.228-.616v.06c0 2.385 1.693 4.374 3.946 4.828a4.93 4.93 0 0 1-2.224.084c.626 1.953 2.444 3.376 4.6 3.415a9.867 9.867 0 0 1-6.102 2.105c-.395 0-.786-.023-1.17-.068a13.924 13.924 0 0 0 7.548 2.212c9.057 0 14.01-7.496 14.01-13.986 0-.21 0-.423-.015-.633a9.936 9.936 0 0 0 2.457-2.548l-.047-.02z"/></svg>
+    </a>
+    <a id="share-facebook" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no Facebook" class="icon-link" title="Facebook" tabindex="0" role="link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.326v21.348C0 23.406.593 24 1.326 24h11.495v-9.294H9.691v-3.622h3.13V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.466.099 2.797.143v3.24h-1.918c-1.504 0-1.795.716-1.795 1.763v2.313h3.59l-.467 3.622h-3.123V24h6.116C23.407 24 24 23.407 24 22.674V1.326C24 .593 23.407 0 22.675 0z"/></svg>
+    </a>
+    <a id="share-threads" href="#" target="_blank" rel="noopener" aria-label="Compartilhar no Threads" class="icon-link" title="Threads" tabindex="0" role="link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1.5 15a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0-6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0-6.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>
+    </a>
+    <a id="share-instagram" href="#" target="_blank" rel="noopener" aria-label="Abrir Instagram" class="icon-link" title="Instagram" tabindex="0" role="link">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="24" height="24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 2A3.75 3.75 0 0 0 4 7.75v8.5A3.75 3.75 0 0 0 7.75 20h8.5a3.75 3.75 0 0 0 3.75-3.75v-8.5A3.75 3.75 0 0 0 16.25 4h-8.5zm8.5 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+    </a>
   </div>
 
-  <!-- Sidebar de Favoritos -->
-  <div id="favoritos-lista">
-    <button class="fechar-lista" onclick="toggleFavoritos()">×</button>
-    <h2>Seus Favoritos</h2>
-    <div id="favoritos-conteudo"></div>
-    
-    <!-- Opções de Exportação -->
-    <div class="export-options">
-      <button onclick="exportarFavoritos('json')">Exportar JSON</button>
-      <button onclick="exportarFavoritos('txt')">Exportar TXT</button>
-    </div>
-  </div>
+  <section id="favoritos-container" aria-label="Frases favoritas" hidden>
+    <h2>Favoritos</h2>
+    <ul id="lista-favoritos" tabindex="0" aria-live="polite"></ul>
+    <button id="btn-fechar-favoritos" aria-label="Fechar lista de favoritos" type="button">Fechar</button>
+  </section>
 
-  <!-- Controles de Acessibilidade -->
-  <div class="acessibilidade">
-    <button title="Aumentar fonte (Ctrl + +)" onclick="ajustarFonte(1)">A+</button>
-    <button title="Diminuir fonte (Ctrl + -)" onclick="ajustarFonte(-1)">A-</button>
-    <button title="Ler em voz alta (Ctrl + L)" onclick="lerTexto()">🔊</button>
-    <button title="Parar leitura" onclick="pararLeitura()">⏹️</button>
-  </div>
+</main>
 
-  <script>
-    // [BANCO DE FRASES]
-    const frases = [
-      {
-        texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.",
-        autor: "Rubem Alves"
-      },
-      {
-        texto: "Viver relações saudáveis não significa viver relações sem conflitos.",
-        autor: "Ana Nunes"
-      },
-      {
-        texto: "Ser humana, antes de tudo, é ser vulnerável.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Tem coisa que não depende só da gente. Tem coisa que não exige o próximo passo.",
-        autor: "Ana Santos"
-      },
-      {
-        texto: "Nem todo diálogo constrói pontes. Às vezes, constrói muralhas.",
-        autor: "Amanda Carretero"
-      },
-      {
-        texto: "Você precisa escutar o que você tem a dizer.",
-        autor: "Epstemia"
-      },
-      {
-        texto: "A vida não é linear. Aceite.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Tu vai precisar desistir de ter um passado melhor.",
-        autor: "Joice Armani"
-      },
-      {
-        texto: "O desconforto de dizer não é temporário, mas o alívio de respeitar seus limites é duradouro.",
-        autor: "Instituto Tiê"
-      },
-      {
-        texto: "A conexão interior é a base para você criar uma vida mais autêntica.",
-        autor: "Renata Stuart"
-      },
-      {
-        texto: "Não troque sua autenticidade por aprovação.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Sentir é cura.",
-        autor: "Iandê Albuquerque"
-      },
-      {
-        texto: "A saída é para dentro.",
-        autor: "Kiko Kislansky"
-      },
-      {
-        texto: "Sem coragem, asa vira fardo.",
-        autor: "Dorsal"
-      },
-      {
-        texto: "Destrua a ideia que reprimir emoção é sinal de força.",
-        autor: "Andrew Amaurick"
-      },
-      {
-        texto: "Desliga o celular e olhe para o céu.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Ganhe tempo sendo você mesma.",
-        autor: "Tamires Henke"
-      },
-      {
-        texto: "O que toca a alma indica o caminho.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Aceite sinais confusos como não, porque o sim é inconfundível.",
-        autor: "Manoel de Barros"
-      },
-      {
-        texto: "Seja o adulto que você precisou quando era criança.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "O maior trauma é a desconexão de si mesmo.",
-        autor: "Gabor Maté"
-      },
-      {
-        texto: "Você é a melhor coisa que aconteceu com você mesma. Não se perda de vista.",
-        autor: "Van Brandon"
-      },
-      {
-        texto: "Leve a sério viver em paz.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "O que o outro faz é sobre ele e o que você aceita é sobre você.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Algo extraordinário muda dentro de nós quando decidimos ser honestos com nós mesmos.",
-        autor: "Van Brandon"
-      },
-      {
-        texto: "Você está sempre ouvindo o que pensa, torne seus pensamentos agradáveis.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Abrir mão de nossas emoções por medo de que o custo seja muito alto significa nos afastarmos da única coisa que dá sentido e significado à vida.",
-        autor: "Brené Brown"
-      },
-      {
-        texto: "Se relacionar é depositar confiança sem garantias.",
-        autor: "Tamires Henke"
-      },
-      {
-        texto: "Se livre de guerras desnecessárias.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "As pessoas não são perturbada pelas coisas, mas pelo modo que as vêem.",
-        autor: "Epicteto"
-      },
-      {
-        texto: "Fizeste o melhor que sabias. Perdoa-te.",
-        autor: "Manuel Clemente"
-      },
-      {
-        texto: "Decida ser você e não volte atrás.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Não querer caber, liberta.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Diferentes fases da sua vida irão exigir diferentes partes e versões de você.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Tudo que se vai, me ensina o valor do que permanece.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Você pode ficar triste depois de tomar a decisão certa e, ainda assim, permanecer firme nela.",
-        autor: "Isabella Santana"
-      },
-      {
-        texto: "O que não precisamos no meio das nossas batalhas é sentir vergonha de sermos humanos.",
-        autor: "Brené Brown"
-      },
-      {
-        texto: "Não tenha medo da dor, tenha medo de não enfrentá-la, criticá-la, usá-la.",
-        autor: "Michel Foucault"
-      },
-      {
-        texto: "Precisamos resolver nossos monstros secretos, nossas feridas clandestinas, nossa insanidade oculta.",
-        autor: "Michel Foucault"
-      },
-      {
-        texto: "As pessoas sabem aquilo que elas fazem; frequentemente sabem por que fazem o que fazem; mas o que ignoram é o efeito produzido por aquilo que fazem.",
-        autor: "Michel Foucault"
-      },
-      {
-        texto: "Se quiseres poder suportar a vida, fica pronto para aceitar a morte.",
-        autor: "Sigmund Freud"
-      },
-      {
-        texto: "Mais do que autoconhecer-se, desconheça-se. Se disponha a rejeitar muito do que já acreditou, se desfaça daquilo que já não faz mais sentido.",
-        autor: "Tamires Henke"
-      },
-      {
-        texto: "O paradoxo curioso é que quando eu me aceito como eu sou, então eu mudo.",
-        autor: "Carl Rogers"
-      },
-      {
-        texto: "Você já esteve aqui antes, portanto sabe como retornar. Espere o amanhã.",
-        autor: "Tamires Henke"
-      },
-      {
-        texto: "Existe muita coisa para viver depois da dor.",
-        autor: "Iandê Albuquerque"
-      },
-      {
-        texto: "Às vezes a gente prolonga demais a estadia em alguns lugares.",
-        autor: "Iandê Albuquerque"
-      },
-      {
-        texto: "Quando está perdido em pensamentos, você pode não ver o que está bem à sua frente.",
-        autor: "Haemin Sunim"
-      },
-      {
-        texto: "Eu não sou o que aconteceu comigo, eu sou o que eu escolhi me tornar.",
-        autor: "Carl Jung"
-      },
-      {
-        texto: "Não dá para sair ileso dessa vida. Alguma dor você terá que escolher sustentar.",
-        autor: "Tamires Henke"
-      },
-      {
-        texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Recomeços não exigem esquecimento. Exigem nova relação com a memória.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Que minha solidão me sirva de companhia. Que eu tenha a coragem de me enfrentar. Que eu saiba ficar com o nada. E mesmo assim me sentir como se estivesse plena de tudo.",
-        autor: "Clarice Lispector"
-      },
-      {
-        texto: "É sobretudo na solidão que se sente a vantagem de viver com alguém que saiba pensar.",
-        autor: "Jean-Jacques Rousseau"
-      },
-      {
-        texto: "Nós nascemos sozinhos, vivemos sozinhos e morremos sozinhos. Somente através do amor e das amizades é que podemos criar a ilusão, durante um momento, de que não estamos sozinhos.",
-        autor: "Orson Welles"
-      },
-      {
-        texto: "A consciência é uma pequena lanterna que a solidão acende à noite.",
-        autor: "Madame de Staël"
-      },
-      {
-        texto: "Enquanto não atravessarmos a dor de nossa própria solidão, continuaremos a nos buscar em outras metades. Para viver a dois, antes, é necessário ser um.",
-        autor: "Fernando Teixeira de Andrade"
-      },
-      {
-        texto: "Sim, minha força está na solidão. Não tenho medo nem de chuvas tempestivas nem das grandes ventanias soltas, pois eu também sou o escuro da noite.",
-        autor: "Clarice Lispector"
-      },
-      {
-        texto: "Não subestime sua dor só porque outros têm 'dores maiores'. Sua tristeza merece ser vista.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Se fosse seu melhor amigo(a) nessa dor, o que você diria? Diga isso para você agora.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Nenhuma emoção dura para sempre. Nem a alegria, nem a dor. Isso também vai mudar.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora. Isso não é sorte - é sua força.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Não julgue sua vida às 3h da manhã. A escuridão distorce até paisagens familiares.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Sua força não some nos dias em que você chora. Ela está na decisão de secar as lágrimas.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Permita-se o luxo de não ter respostas hoje. Algumas perguntas precisam ser vividas.",
-        autor: "Autor desconhecido"
-      },
-      {
-        texto: "Quando a dor sussurrar 'você não merece amor', lembre: a dor mente.",
-        autor: "Autor desconhecido"
+<script>
+(() => {
+  'use strict';
+
+  // === Dados: frases com autores ===
+  const frases = [
+    { id: "frase1", texto: "A felicidade se basta, ela não cria, não produz pérolas. A ostra produz pérolas como um mecanismo de defesa contra irritantes que entram em sua concha, como grãos de areia ou parasitas. São os que sofrem que produzem a beleza, para parar de sofrer. Então lembre-se, ostra feliz não faz pérolas.", autor: "Rubem Alves" },
+    { id: "frase2", texto: "Viver relações saudáveis não significa viver relações sem conflitos", autor: "Ana Nunes" },
+    { id: "frase3", texto: "Ser humana, antes de tudo, é ser vulnerável.", autor: "Desconhecido" },
+    { id: "frase4", texto: "Tem coisa que não depende só da gente. Tem coisa que não exige o próximo passo.", autor: "Ana Santos" },
+    { id: "frase5", texto: "Nem todo diálogo constrói pontes. Às vezes, constrói muralhas", autor: "Amanda Carretero" },
+    { id: "frase6", texto: "Você precisa escutar o que você tem a dizer", autor: "Epstemia" },
+    { id: "frase7", texto: "A vida não é linear. Aceite", autor: "Desconhecido" },
+    { id: "frase8", texto: "Tu vai precisar desistir de ter um passado melhor.", autor: "Joice Armani" },
+    { id: "frase9", texto: "O desconforto de dizer não é temporário, mas o alívio de respeitar seus limites é duradouro.", autor: "Instituto Tiê" },
+    { id: "frase10", texto: "A conexão interior é a base para você criar uma vida mais autêntica.", autor: "Renata Stuart" },
+    { id: "frase11", texto: "Não troque sua autenticidade por aprovação", autor: "Desconhecido" },
+    { id: "frase12", texto: "Sentir é cura.", autor: "Iandê Albuquerque" },
+    { id: "frase13", texto: "A saída é para dentro.", autor: "Kiko Kislansky" },
+    { id: "frase14", texto: "Sem coragem, asa vira fardo.", autor: "Dorsal" },
+    { id: "frase15", texto: "Destrua a ideia que reprimir emoção é sinal de força.", autor: "Andrew Amaurick" },
+    { id: "frase16", texto: "Desliga o celular e olhe para o céu", autor: "Desconhecido" },
+    { id: "frase17", texto: "Ganhe tempo sendo você mesma.", autor: "Tamires Henke" },
+    { id: "frase18", texto: "O que toca a alma indica o caminho.", autor: "Desconhecido" },
+    { id: "frase19", texto: "Aceite sinais confusos como não, porque o sim é inconfundível.", autor: "Manoel de Barros" },
+    { id: "frase20", texto: "Seja o adulto que você precisou quando era criança.", autor: "Desconhecido" },
+    { id: "frase21", texto: "O maior trauma é a desconexão de si mesmo", autor: "Gabor Maté" },
+    { id: "frase22", texto: "Você é a melhor coisa que aconteceu com você mesma. Não se perca de vista.", autor: "Van Brandon" },
+    { id: "frase23", texto: "Leve a sério viver em paz", autor: "Desconhecido" },
+    { id: "frase24", texto: "O que o outro faz é sobre ele e o que você aceita é sobre você", autor: "Desconhecido" },
+    { id: "frase25", texto: "Algo extraordinário muda dentro de nós quando decidimos ser honestos com nós mesmos", autor: "Van Brandon" },
+    { id: "frase26", texto: "Você está sempre ouvindo o que pensa, torne seus pensamentos agradáveis", autor: "Desconhecido" },
+    { id: "frase27", texto: "Abrir mão de nossas emoções por medo de que o custo seja muito alto significa nos afastarmos da única coisa que dá sentido e significado à vida.", autor: "Brené Brown" },
+    { id: "frase28", texto: "Se relacionar é depositar confiança sem garantias.", autor: "Tamires Henke" },
+    { id: "frase29", texto: "se livre de guerras desnecessárias", autor: "Desconhecido" },
+    { id: "frase30", texto: "As pessoas não são perturbada pelas coisas, mas pelo modo que as vêem", autor: "Epicteto" },
+    { id: "frase31", texto: "Fizeste o melhor que sabias. Perdoa-te.", autor: "Manuel Clemente" },
+    { id: "frase32", texto: "Decida ser você e não volte atrás", autor: "Desconhecido" },
+    { id: "frase33", texto: "Não querer caber, liberta.", autor: "Desconhecido" },
+    { id: "frase34", texto: "Diferentes fases da sua vida irão exigir diferentes partes e versões de você", autor: "Desconhecido" },
+    { id: "frase35", texto: "Tudo que se vai, me ensina o valor do que permanece.", autor: "Desconhecido" },
+    { id: "frase36", texto: "Você pode ficar triste depois de tomar a decisão certa e, ainda assim, permanecer firme nela.", autor: "Isabella Santana" },
+    { id: "frase37", texto: "O que não precisamos no meio das nossas batalhas é sentir vergonha de sermos humanos.", autor: "Brené Brown" },
+    { id: "frase38", texto: "Não tenha medo da dor, tenha medo de não enfrentá-la, criticá-la, usá-la.", autor: "Michel Foucault" },
+    { id: "frase39", texto: "Precisamos resolver nossos monstros secretos, nossas feridas clandestinas, nossa insanidade oculta.", autor: "Michel Foucault" },
+    { id: "frase40", texto: "As pessoas sabem aquilo que elas fazem; frequentemente sabem por que fazem o que fazem; mas o que ignoram é o efeito produzido por aquilo que fazem.", autor: "Michel Foucault" },
+    { id: "frase41", texto: "Se quiseres poder suportar a vida, fica pronto para aceitar a morte.", autor: "Sigmund Freud" },
+    { id: "frase42", texto: "Mais do que autoconhecer-se, desconheça-se. Se disponha a rejeitar muito do que já acreditou, se desfaça daquilo que já não faz mais sentido.", autor: "Tamires Henke" },
+    { id: "frase43", texto: "O paradoxo curioso é que quando eu me aceito como eu sou, então eu mudo.", autor: "Carl Rogers" },
+    { id: "frase44", texto: "Você já esteve aqui antes, portanto sabe como retornar. Espere o amanhã.", autor: "Tamires Henke" },
+    { id: "frase45", texto: "Existe muita coisa para viver depois da dor.", autor: "Iandê Albuquerque" },
+    { id: "frase46", texto: "Às vezes a gente prolonga demais a estadia em alguns lugares.", autor: "Iandê Albuquerque" },
+    { id: "frase47", texto: "Quando está perdido em pensamentos, você pode não ver o que está bem à sua frente.", autor: "Haemin Sunim" },
+    { id: "frase48", texto: "Eu não sou o que aconteceu comigo, eu sou o que eu escolhi me tornar.", autor: "Carl Jung" },
+    { id: "frase49", texto: "Não dá para sair ileso dessa vida. Alguma dor você terá que escolher sustentar.", autor: "Tamires Henke" },
+    { id: "frase50", texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora.", autor: "Desconhecido" },
+    { id: "frase51", texto: "Recomeços não exigem esquecimento. Exigem nova relação com a memória.", autor: "Desconhecido" },
+    { id: "frase52", texto: "Que minha solidão me sirva de companhia. Que eu tenha a coragem de me enfrentar. Que eu saiba ficar com o nada. E mesmo assim me sentir como se estivesse plena de tudo.", autor: "Clarice Lispector" },
+    { id: "frase53", texto: "É sobretudo na solidão que se sente a vantagem de viver com alguém que saiba pensar.", autor: "Jean-Jacques Rousseau" },
+    { id: "frase54", texto: "Nós nascemos sozinhos, vivemos sozinhos e morremos sozinhos. Somente através do amor e das amizades é que podemos criar a ilusão, durante um momento, de que não estamos sozinhos.", autor: "Orson Welles" },
+    { id: "frase55", texto: "A consciência é uma pequena lanterna que a solidão acende à noite.", autor: "Madame de Staël" },
+    { id: "frase56", texto: "Enquanto não atravessarmos a dor de nossa própria solidão, continuaremos a nos buscar em outras metades. Para viver a dois, antes, é necessário ser um.", autor: "Fernando Teixeira de Andrade" },
+    { id: "frase57", texto: "Sim, minha força está na solidão. Não tenho medo nem de chuvas tempestivas nem das grandes ventanias soltas, pois eu também sou o escuro da noite.", autor: "Clarice Lispector" },
+    { id: "frase58", texto: "Não subestime sua dor só porque outros têm 'dores maiores'. Sua tristeza merece ser vista.", autor: "Desconhecido" },
+    { id: "frase59", texto: "Se fosse seu melhor amigo(a) nessa dor, o que você diria? Diga isso para você agora.", autor: "Desconhecido" },
+    { id: "frase60", texto: "Nenhuma emoção dura para sempre. Nem a alegria, nem a dor. Isso também vai mudar.", autor: "Desconhecido" },
+    { id: "frase61", texto: "Você já sobreviveu a 100% dos seus dias difíceis até agora. Isso não é sorte - é sua força.", autor: "Desconhecido" },
+    { id: "frase62", texto: "Não julgue sua vida às 3h da manhã. A escuridão distorce até paisagens familiares.", autor: "Desconhecido" },
+    { id: "frase63", texto: "Sua força não some nos dias em que você chora. Ela está na decisão de secar as lágrimas.", autor: "Desconhecido" },
+    { id: "frase64", texto: "Permita-se o luxo de não ter respostas hoje. Algumas perguntas precisam ser vividas.", autor: "Desconhecido" },
+    { id: "frase65", texto: "Quando a dor sussurrar 'você não merece amor', lembre: a dor mente.", autor: "Desconhecido" }
+  ];
+
+  // === Elementos DOM ===
+  const fraseTextoEl = document.getElementById('frase-texto');
+  const fraseAutorEl = document.getElementById('frase-autor');
+  const btnNovaFrase = document.getElementById('btn-nova-frase');
+  const btnFavoritar = document.getElementById('btn-favoritar');
+  const btnVoz = document.getElementById('btn-voz');
+  const favoritosContainer = document.getElementById('favoritos-container');
+  const listaFavoritos = document.getElementById('lista-favoritos');
+  const btnFecharFavoritos = document.getElementById('btn-fechar-favoritos');
+  const appMain = document.getElementById('app');
+
+  // Temas de cor para alternar
+  const temas = ['tema-1', 'tema-2', 'tema-3', 'tema-4', 'tema-5'];
+
+  // Estado atual
+  let indiceAtual = 0;
+  let favoritos = new Set();
+
+  // Helpers para localStorage favoritos
+  function carregarFavoritos() {
+    try {
+      const dados = localStorage.getItem('favoritosPausaParaSentir');
+      if (dados) {
+        favoritos = new Set(JSON.parse(dados));
       }
-    ];
+    } catch {
+      favoritos = new Set();
+    }
+  }
+  function salvarFavoritos() {
+    localStorage.setItem('favoritosPausaParaSentir', JSON.stringify(Array.from(favoritos)));
+  }
 
-    // [ESTADO GLOBAL]
-    let estado = {
-      fraseAtual: null,
-      autorAtual: null,
-      favoritos: JSON.parse(localStorage.getItem('favoritos')) || [],
-      modoNoturno: true,
-      tamanhoFonte: 16, // Tamanho base em px
-      synth: window.speechSynthesis,
-      utterance: null
-    };
+  // Mostrar frase e autor na tela e atualizar URL e botão favoritar
+  function mostrarFrase(indice) {
+    const f = frases[indice];
+    fraseTextoEl.textContent = f.texto;
+    fraseAutorEl.textContent = f.autor ? "— " + f.autor : "";
+    indiceAtual = indice;
+    atualizarURL(f.id);
+    atualizarBotaoFavorito(f.id);
+    aplicarCorTema(indice);
+  }
 
-    // [INICIALIZAÇÃO]
-    document.addEventListener('DOMContentLoaded', function() {
-      document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
-      atualizarTextoModo();
-      novaFrase();
-      atualizarContadorFavoritos();
-      
-      // Restaurar tamanho da fonte se existir no localStorage
-      const tamanhoSalvo = localStorage.getItem('tamanhoFonte');
-      if (tamanhoSalvo) {
-        estado.tamanhoFonte = parseInt(tamanhoSalvo);
-        document.body.style.fontSize = estado.tamanhoFonte + 'px';
-      }
-      
-      // Configurar atalhos de teclado
-      document.addEventListener('keydown', function(e) {
-        // Ctrl + + para aumentar fonte
-        if (e.ctrlKey && (e.key === '+' || e.key === '=')) {
-          e.preventDefault();
-          ajustarFonte(1);
-        }
-        // Ctrl + - para diminuir fonte
-        if (e.ctrlKey && e.key === '-') {
-          e.preventDefault();
-          ajustarFonte(-1);
-        }
-        // Ctrl + L para ler texto
-        if (e.ctrlKey && e.key.toLowerCase() === 'l') {
-          e.preventDefault();
-          lerTexto();
+  // Atualizar URL com #fraseX
+  function atualizarURL(id) {
+    history.replaceState(null, '', '#' + id);
+  }
+
+  // Atualizar estado do botão favoritar
+  function atualizarBotaoFavorito(id) {
+    const pressionado = favoritos.has(id);
+    btnFavoritar.setAttribute('aria-pressed', pressionado);
+    btnFavoritar.textContent = pressionado ? '⭐ Favoritado' : '⭐ Favoritar';
+  }
+
+  // Alternar favorito
+  function toggleFavorito() {
+    const id = frases[indiceAtual].id;
+    if (favoritos.has(id)) {
+      favoritos.delete(id);
+    } else {
+      favoritos.add(id);
+    }
+    salvarFavoritos();
+    atualizarBotaoFavorito(id);
+  }
+
+  // Mostrar lista de favoritos na seção, criar lista dinâmica
+  function mostrarFavoritos() {
+    listaFavoritos.innerHTML = '';
+    if (favoritos.size === 0) {
+      listaFavoritos.innerHTML = '<li>Nenhuma frase favorita ainda.</li>';
+    } else {
+      favoritos.forEach(favId => {
+        const f = frases.find(fr => fr.id === favId);
+        if (f) {
+          const li = document.createElement('li');
+          li.textContent = f.texto + " — " + f.autor;
+          // Botão remover favorito na lista
+          const btnRemover = document.createElement('button');
+          btnRemover.type = 'button';
+          btnRemover.textContent = '❌';
+          btnRemover.title = 'Remover dos favoritos';
+          btnRemover.setAttribute('aria-label', 'Remover dos favoritos: ' + f.texto);
+          btnRemover.onclick = () => {
+            favoritos.delete(favId);
+            salvarFavoritos();
+            mostrarFavoritos();
+            // Se removido atual, atualizar botão favoritar
+            if (favId === frases[indiceAtual].id) atualizarBotaoFavorito(favId);
+          };
+          li.appendChild(btnRemover);
+          listaFavoritos.appendChild(li);
         }
       });
-    });
-
-    // [FUNÇÕES PRINCIPAIS]
-    function novaFrase() {
-      const fraseEl = document.getElementById("frase");
-      fraseEl.style.opacity = 0;
-      
-      setTimeout(() => {
-        const i = Math.floor(Math.random() * frases.length);
-        estado.fraseAtual = frases[i].texto;
-        estado.autorAtual = frases[i].autor;
-        
-        fraseEl.textContent = estado.fraseAtual;
-        document.getElementById("autor").textContent = `- ${estado.autorAtual}`;
-        fraseEl.style.opacity = 1;
-        
-        // Fechar compartilhamento ao mudar frase
-        document.getElementById("share-options").classList.remove("aberto");
-        
-        // Parar leitura anterior se estiver ocorrendo
-        if (estado.synth.speaking) {
-          estado.synth.cancel();
-        }
-      }, 300);
     }
+    favoritosContainer.hidden = false;
+    btnFecharFavoritos.focus();
+  }
 
-    function toggleShare() {
-      document.getElementById("share-options").classList.toggle("aberto");
-    }
+  // Fechar lista favoritos
+  btnFecharFavoritos.addEventListener('click', () => {
+    favoritosContainer.hidden = true;
+    btnFavoritar.focus();
+  });
 
-    function compartilhar(rede) {
-      if (!estado.fraseAtual) return;
-      
-      const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir`;
-      const urlCompartilhamento = encodeURIComponent(window.location.href);
-      const textoCompartilhamento = encodeURIComponent(texto);
-      let url = '';
-      
-      switch(rede) {
-        case 'whatsapp':
-          url = `https://api.whatsapp.com/send?text=${textoCompartilhamento}`;
-          break;
-        case 'facebook':
-          url = `https://www.facebook.com/sharer/sharer.php?u=${urlCompartilhamento}&quote=${textoCompartilhamento}`;
-          break;
-        case 'twitter':
-          url = `https://twitter.com/intent/tweet?text=${textoCompartilhamento}&url=${urlCompartilhamento}`;
-          break;
-        case 'linkedin':
-          url = `https://www.linkedin.com/sharing/share-offsite/?url=${urlCompartilhamento}`;
-          break;
-      }
-      
-      if (url) {
-        window.open(url, '_blank', 'width=600,height=400');
-      }
-    }
+  // Escolher frase aleatória diferente da atual
+  function novaFrase() {
+    let novoIndice;
+    do {
+      novoIndice = Math.floor(Math.random() * frases.length);
+    } while (novoIndice === indiceAtual && frases.length > 1);
+    mostrarFrase(novoIndice);
+  }
 
-    function copiarLink() {
-      if (!estado.fraseAtual) return;
-      
-      const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir: ${window.location.href}`;
-      
-      navigator.clipboard.writeText(texto)
-        .then(() => alert("Texto copiado! Agora você pode colar onde quiser."))
-        .catch(() => alert("Não foi possível copiar o texto."));
-    }
+  // Aplicar cor tema alternando baseado no índice da frase
+  function aplicarCorTema(indice) {
+    temas.forEach(t => appMain.classList.remove(t));
+    const temaAtual = temas[indice % temas.length];
+    appMain.classList.add(temaAtual);
+  }
 
-    function salvarFavorito() {
-      if (!estado.fraseAtual) return;
-      
-      const novaFavorita = {
-        texto: estado.fraseAtual,
-        autor: estado.autorAtual
-      };
-      
-      if (!estado.favoritos.some(f => f.texto === estado.fraseAtual)) {
-        estado.favoritos.push(novaFavorita);
-        localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
-        atualizarContadorFavoritos();
-        renderizarFavoritos();
-        alert("Frase favoritada!");
-      } else {
-        alert("Esta frase já está nos favoritos!");
-      }
-    }
+  // Compartilhamento
 
-    function toggleFavoritos() {
-      const favoritosLista = document.getElementById('favoritos-lista');
-      favoritosLista.classList.toggle('aberto');
-      
-      if (favoritosLista.classList.contains('aberto')) {
-        renderizarFavoritos();
-        // Mostrar opções de exportação quando abrir favoritos
-        document.querySelector('.export-options').classList.add('aberto');
-      }
-    }
+  // Criar URL completa para frase (ex: https://meusite.com/#fraseX)
+  function urlFrase() {
+    return window.location.origin + window.location.pathname + '#' + frases[indiceAtual].id;
+  }
 
-    function renderizarFavoritos() {
-      const container = document.getElementById('favoritos-conteudo');
-      container.innerHTML = estado.favoritos.length === 0 
-        ? '<p>Nenhuma frase favoritada ainda.</p>'
-        : estado.favoritos.map((frase, index) => `
-            <div class="favorito-item">
-              <p>"${frase.texto}"</p>
-              <p><em>- ${frase.autor}</em></p>
-              <button onclick="removerFavorito(${index})">Remover</button>
-            </div>
-          `).join('');
-    }
+  // Codificar texto para URL
+  function encodeURIText(text) {
+    return encodeURIComponent(text);
+  }
 
-    function removerFavorito(index) {
-      estado.favoritos.splice(index, 1);
-      localStorage.setItem('favoritos', JSON.stringify(estado.favoritos));
-      atualizarContadorFavoritos();
-      renderizarFavoritos();
-    }
+  // Atualiza links de compartilhamento
+  function atualizarLinksCompartilhar() {
+    const textoCompartilhar = `"${frases[indiceAtual].texto}" — ${frases[indiceAtual].autor}\n\n${urlFrase()}`;
 
-    function alternarModo() {
-      estado.modoNoturno = !estado.modoNoturno;
-      document.body.classList.toggle('modo-diurno', !estado.modoNoturno);
-      atualizarTextoModo();
-    }
+    // WhatsApp
+    document.getElementById('share-whatsapp').href =
+      `https://wa.me/?text=${encodeURIText(textoCompartilhar)}`;
 
-    // [FUNÇÕES DE ACESSIBILIDADE]
-    function ajustarFonte(direcao) {
-      // Limites mínimo e máximo para o tamanho da fonte
-      const minSize = 12;
-      const maxSize = 24;
-      
-      // Ajustar tamanho
-      estado.tamanhoFonte += (direcao * 2);
-      
-      // Garantir que está dentro dos limites
-      if (estado.tamanhoFonte < minSize) estado.tamanhoFonte = minSize;
-      if (estado.tamanhoFonte > maxSize) estado.tamanhoFonte = maxSize;
-      
-      // Aplicar o novo tamanho
-      document.body.style.fontSize = estado.tamanhoFonte + 'px';
-      
-      // Salvar preferência
-      localStorage.setItem('tamanhoFonte', estado.tamanhoFonte);
-    }
+    // Twitter
+    document.getElementById('share-twitter').href =
+      `https://twitter.com/intent/tweet?text=${encodeURIText(textoCompartilhar)}`;
 
-    function lerTexto() {
-      // Parar leitura anterior se estiver ocorrendo
-      if (estado.synth.speaking) {
-        estado.synth.cancel();
-      }
-      
-      if (!estado.fraseAtual) return;
-      
-      // Criar o texto para leitura (frase + autor)
-      const textoParaLer = `${estado.fraseAtual}. Por ${estado.autorAtual}.`;
-      
-      // Configurar a fala
-      estado.utterance = new SpeechSynthesisUtterance(textoParaLer);
-      estado.utterance.lang = 'pt-BR';
-      estado.utterance.rate = 0.9; // Velocidade um pouco mais lenta
-      
-      // Iniciar a leitura
-      estado.synth.speak(estado.utterance);
-    }
+    // Facebook (sharing url only)
+    document.getElementById('share-facebook').href =
+      `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlFrase())}`;
 
-    function pararLeitura() {
-      if (estado.synth.speaking) {
-        estado.synth.cancel();
-      }
-    }
+    // Threads (não tem share oficial, abre perfil Instagram por enquanto)
+    document.getElementById('share-threads').href =
+      `https://www.instagram.com/${'threads'}/`; // ajuste se quiser perfil threads
 
-    // [EXPORTAÇÃO DE FAVORITOS]
-    function exportarFavoritos(formato) {
-      if (estado.favoritos.length === 0) {
-        alert("Nenhum favorito para exportar!");
-        return;
-      }
-      
-      let conteudo, tipoMime, extensao;
-      
-      if (formato === 'json') {
-        conteudo = JSON.stringify(estado.favoritos, null, 2);
-        tipoMime = 'application/json';
-        extensao = 'json';
-      } else { // TXT
-        conteudo = estado.favoritos.map(f => `"${f.texto}"\n- ${f.autor}\n`).join('\n');
-        tipoMime = 'text/plain';
-        extensao = 'txt';
-      }
-      
-      // Criar blob e link para download
-      const blob = new Blob([conteudo], { type: tipoMime });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `frases-favoritas.${extensao}`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+    // Instagram (não permite share direto, abre Instagram web)
+    document.getElementById('share-instagram').href =
+      `https://www.instagram.com/`;
+  }
 
-    // [FUNÇÕES AUXILIARES]
-    function atualizarTextoModo() {
-      document.querySelector('button[onclick="alternarModo()"]').textContent = 
-        estado.modoNoturno ? '☀️ Modo Diurno' : '🌙 Modo Noturno';
-    }
+  // Voz (SpeechSynthesis) — lê a frase em voz feminina
 
-    function atualizarContadorFavoritos() {
-      document.getElementById('contador-favoritos').textContent = estado.favoritos.length;
+  function falarFrase() {
+    if (!('speechSynthesis' in window)) {
+      alert('Seu navegador não suporta leitura em voz.');
+      return;
     }
-  </script>
+    window.speechSynthesis.cancel(); // cancela qualquer fala anterior
+    const frase = frases[indiceAtual].texto + ' — ' + frases[indiceAtual].autor;
+    const utterance = new SpeechSynthesisUtterance(frase);
+    // Selecionar voz feminina brasileira preferencialmente
+    const vozes = window.speechSynthesis.getVoices();
+    const vozFem = vozes.find(v => v.lang.startsWith('pt') && v.name.toLowerCase().includes('female')) ||
+                   vozes.find(v => v.lang.startsWith('pt')) ||
+                   vozes[0];
+    if (vozFem) utterance.voice = vozFem;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  // Ao carregar, tenta ler o hash da URL para mostrar frase correspondente
+  function carregarHashFrase() {
+    const hash = location.hash.replace('#', '');
+    const indice = frases.findIndex(f => f.id === hash);
+    if (indice >= 0) return indice;
+    return 0;
+  }
+
+  // === Eventos ===
+
+  btnNovaFrase.addEventListener('click', () => {
+    novaFrase();
+  });
+
+  btnFavoritar.addEventListener('click', () => {
+    toggleFavorito();
+  });
+
+  btnVoz.addEventListener('click', () => {
+    falarFrase();
+  });
+
+  // Favoritos com clique longo no botão favoritar (exibir lista favoritos)
+  let pressTimer;
+  btnFavoritar.addEventListener('mousedown', () => {
+    pressTimer = setTimeout(() => mostrarFavoritos(), 800);
+  });
+  btnFavoritar.addEventListener('mouseup', () => clearTimeout(pressTimer));
+  btnFavoritar.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+  btnFavoritar.addEventListener('touchstart', () => {
+    pressTimer = setTimeout(() => mostrarFavoritos(), 800);
+  });
+  btnFavoritar.addEventListener('touchend', () => clearTimeout(pressTimer));
+
+  // Ao carregar a página
+  window.addEventListener('load', () => {
+    carregarFavoritos();
+    const idx = carregarHashFrase();
+    mostrarFrase(idx);
+    atualizarLinksCompartilhar();
+  });
+
+  // Atualiza links sempre que frase mudar
+  const observerFrase = new MutationObserver(() => atualizarLinksCompartilhar());
+  observerFrase.observe(fraseTextoEl, { childList: true });
+
+})();
+</script>
+
 </body>
 </html>
