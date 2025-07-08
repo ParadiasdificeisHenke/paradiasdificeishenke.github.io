@@ -120,6 +120,7 @@
       cursor: pointer;
       font-size: 1.8em;
       transition: transform 0.3s;
+      padding: 5px;
     }
     .share-btn:hover {
       transform: scale(1.2);
@@ -216,10 +217,10 @@
   <!-- Opções de Compartilhamento -->
   <div id="share-options">
     <button class="share-btn" onclick="compartilhar('whatsapp')" title="Compartilhar no WhatsApp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="compartilhar('instagram')" title="Compartilhar no Instagram"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" style="width:32px;height:32px;"></button>
     <button class="share-btn" onclick="compartilhar('facebook')" title="Compartilhar no Facebook"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" style="width:32px;height:32px;"></button>
-    <button class="share-btn" onclick="compartilhar('threads')" title="Compartilhar no Threads"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Threads_%28app%29_logo.svg/512px-Threads_%28app%29_logo.svg.png" alt="Threads" style="width:32px;height:32px;"></button>
     <button class="share-btn" onclick="compartilhar('twitter')" title="Compartilhar no Twitter"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter" style="width:32px;height:32px;"></button>
+    <button class="share-btn" onclick="compartilhar('linkedin')" title="Compartilhar no LinkedIn"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" style="width:32px;height:32px;"></button>
+    <button class="share-btn" onclick="copiarLink()" title="Copiar link"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Copy_icon_%281992%29.png" alt="Copiar" style="width:32px;height:32px;"></button>
   </div>
 
   <!-- Sidebar de Favoritos -->
@@ -331,7 +332,7 @@
         autor: "Gabor Maté"
       },
       {
-        texto: "Você é a melhor coisa que aconteceu com você mesma. Não se perca de vista.",
+        texto: "Você é a melhor coisa que aconteceu com você mesma. Não se perda de vista.",
         autor: "Van Brandon"
       },
       {
@@ -585,30 +586,38 @@
       if (!estado.fraseAtual) return;
       
       const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir`;
+      const urlCompartilhamento = encodeURIComponent(window.location.href);
+      const textoCompartilhamento = encodeURIComponent(texto);
       let url = '';
       
       switch(rede) {
         case 'whatsapp':
-          url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
+          url = `https://api.whatsapp.com/send?text=${textoCompartilhamento}`;
           break;
-        case 'instagram':
-          // Instagram não permite compartilhamento direto, usa área de transferência
-          navigator.clipboard.writeText(texto)
-            .then(() => alert("Texto copiado! Cole no Instagram"))
-            .catch(() => alert("Não foi possível copiar"));
-          return;
         case 'facebook':
-          url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(texto)}`;
-          break;
-        case 'threads':
-          url = `https://www.threads.net/intent/post?text=${encodeURIComponent(texto)}`;
+          url = `https://www.facebook.com/sharer/sharer.php?u=${urlCompartilhamento}&quote=${textoCompartilhamento}`;
           break;
         case 'twitter':
-          url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(texto)}`;
+          url = `https://twitter.com/intent/tweet?text=${textoCompartilhamento}&url=${urlCompartilhamento}`;
+          break;
+        case 'linkedin':
+          url = `https://www.linkedin.com/sharing/share-offsite/?url=${urlCompartilhamento}`;
           break;
       }
       
-      if (url) window.open(url, '_blank', 'width=600,height=400');
+      if (url) {
+        window.open(url, '_blank', 'width=600,height=400');
+      }
+    }
+
+    function copiarLink() {
+      if (!estado.fraseAtual) return;
+      
+      const texto = `"${estado.fraseAtual}" - ${estado.autorAtual}\n\nVia Pausa para sentir: ${window.location.href}`;
+      
+      navigator.clipboard.writeText(texto)
+        .then(() => alert("Texto copiado! Agora você pode colar onde quiser."))
+        .catch(() => alert("Não foi possível copiar o texto."));
     }
 
     function salvarFavorito() {
